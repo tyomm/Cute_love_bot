@@ -55,7 +55,7 @@ def start_message(message):
 #==============1 Kiss button 1======================================
 @bot.message_handler(commands=['kiss_me'])
 def Send_compliment(message):
-  bot.forward_message( 1159606389, message.chat.id, message.message_id)  # Forward message to me ('/kiss_me' command)  
+  bot.forward_message(1159606389, message.chat.id, message.message_id)  # Forward message to me ('/kiss_me' command)  
   bot.send_message(message.chat.id, "Sure! Wait a minute..")
   time.sleep(2)
   bot.send_message(message.chat.id, "💋")
@@ -90,7 +90,7 @@ def start_game(message):
 #===================1 Sending Compliments 1=====================
 @bot.message_handler(commands=['compliment_me'])
 def Send_compliment(message):
-  bot.forward_message( 1159606389, message.chat.id, message.message_id)  # Forward message to me ('/compliment_me' command)
+  bot.forward_message(1159606389, message.chat.id, message.message_id)  # Forward message to me ('/compliment_me' command)
   compl_file_path = "Cute_love_bot/code/text_docs/compliments.txt"
   bot.send_message(message.chat.id, get_random_compliment_from_file(compl_file_path))
 #===================0 Sending Compliments 0=====================
@@ -99,7 +99,7 @@ def Send_compliment(message):
 #===================1 Sending Motivation quetos 1=====================
 @bot.message_handler(commands=['motivation'])
 def Send_motivation(message):
-  bot.forward_message( 1159606389, message.chat.id, message.message_id)  # Forward message to me ('/motivation' command)
+  bot.forward_message(1159606389, message.chat.id, message.message_id)  # Forward message to me ('/motivation' command)
   motiv_file_path = "Cute_love_bot/code/text_docs/motivation.txt"
   bot.send_message(message.chat.id, Motivation_quete(motiv_file_path))
 #===================0 Sending Motivation quetos 0=====================
@@ -178,9 +178,9 @@ def image(message):
       message.message_id)  # Forward message to me ('/sketch' command)
   global i
   images = [
-      "Cute_love_bot\photos_sketch\img2.jpg", "Cute_love_bot\photos_sketch\img3.jpg", "Cute_love_bot\photos_sketch\img4.jpg",
-      "Cute_love_bot\photos_sketch\img5.jpg", "Cute_love_bot\photos_sketch\img6.jpg",
-      "Cute_love_bot\photos_sketch\img8.jpg", "Cute_love_bot\photos_sketch\img7.jpg","Cute_love_bot\photos_sketch\img9.jpg"
+      "Cute_love_bot/photos_sketch/img2.jpg", "Cute_love_bot/photos_sketch/img3.jpg", "Cute_love_bot/photos_sketch/img4.jpg",
+      "Cute_love_bot/photos_sketch/img5.jpg", "Cute_love_bot/photos_sketch/img6.jpg",
+      "Cute_love_bot/photos_sketch/img8.jpg", "Cute_love_bot/photos_sketch/img7.jpg","Cute_love_bot/photos_sketch/img9.jpg"
   ]
   if (i == 8):
     i = 0
@@ -200,232 +200,73 @@ def send_music(message):
       message.message_id)  # Forward message to me ('/song' command)
   global j
   music = [
-      "Cute_love_bot\music\Arctic Monkeys - Do I Wanna Know.mp3", "Cute_love_bot\music\Arctic Monkeys - Why'd You Only Call Me When You're High.mp3",
-      "Cute_love_bot\music\Beach House - Space Song.mp3", "Cute_love_bot\music/Bring Me The Horizon - Drown.mp3", "Cute_love_bot\music/Bring Me The Horizon - Ludens.mp3",
-      "Cute_love_bot\music/Bring Me The Horizon - Shadow Moses.mp3", "Cute_love_bot\music/Bring Me The Horizon - Sleepwalking.mp3", "Cute_love_bot\music/Roar - I Can’t Handle Change.mp3",
-      "Cute_love_bot\music/Swing - Lynn.mp3", "Cute_love_bot\music/The Drums - Money.mp3", "Cute_love_bot\music/Young - Vacations.mp3"
+      "Cute_love_bot/music/Arctic Monkeys - Do I Wanna Know.mp3", "Cute_love_bot/music/Arctic Monkeys - Why'd You Only Call Me When You're High.mp3",
+      "Cute_love_bot/music/Arctic Monkeys - Why'd You Only Call Me When You're High (Liam Nolan Cover).mp3",
+      "Cute_love_bot/music/The Smiths - There Is A Light That Never Goes Out.mp3", "Cute_love_bot/music/The Smiths - This Charming Man.mp3",
+      "Cute_love_bot/music/The Smiths - This Charming Man (Yamantaka Sonic Titan Cover).mp3"
   ]
-  if (j == 11):
+  if (j == 6):
     j = 0
-  with open(music[j], 'rb') as music:
-    # Send the music file
-    bot.send_audio(message.chat.id, music)
-    j += 1
-#================0 Send music 0==============
+  music_file = open(music[j], "rb")
+  bot.send_audio(message.chat.id, music_file)
+  j += 1
+#================0 Send music 0================
 
 
-#================1 Send video 1=================
-k = 0
-
-@bot.message_handler(commands=['i_am_sad_now'])
-def send_video(message):
-  bot.forward_message(1159606389, message.chat.id, message.message_id)  # Forward message to me ('/i_am_sad_now' command)
-  bot.send_message(message.chat.id, "Wait a minute pls💞")
-  global k
-  videos = [
-     "Cute_love_bot\mem_Video\mem1.mp4", "Cute_love_bot\mem_Video\mem2.mp4", "Cute_love_bot\mem_Video\mem3.mp4", "Cute_love_bot\mem_Video\mem4.mp4",
-     "Cute_love_bot\mem_Video\mem5.mp4"
-  ]
-
-  if (k == 5):
-    k = 0
-
-  with open(videos[k], 'rb') as video_file:
-    bot.send_video(message.chat.id, video_file)
-  bot.send_message(message.chat.id, "Don't be sad!\nit's time to smile💗\nCos your smile makes me feel alive in this shitty world💖")
-  k += 1
-#================0 Send video 0=================
-
-
-#==============1 Sending some cute messages 1===================
-cute1 = "Yeah? Wanna hug me?🤗"
-cute2 = "Yes! You are very beautiful<3 hehe"
-heart = "💚"
-heart1 = "❤️"
-feel_heart1 = "Can you hear the silence?"
-feel_heart2 = "Can you see the dark?"
-feel_heart3 = "Can you fix the broken"
-feel_heart4 = "Can you..?"
-feel_heart5 = "Can you feel my heart?"
-love_you = "I Love YOU so fucking much^^"
-text_meow = "meow^^"
-fall_in_love = """
-I wrote a 'song' for you^^ \n
-In other words, there is something in me, that's how I expressed it.
-Here is the text, everything comes from my heart..🥹
-"""
-love_text = """
-I hate this word 
-Love 
-Because I love so many things 
-Like autumn, like listening music, like rain.. 
-So you must understand how small it feels to say I love you 
-But yet I do 
-And I do but this is not a feeling I've felt before 
-This love isn't like the one I have for the sun, the summer nights, the waves of the sea.. 
-This love is new 
-And I'm usually scared of the unknown 
-But you make this unexplainable feeling Feel like home 
-You make feel safe and warm 
-But not the warm a rainy day, a fluffy blanket, a fire makes me feel 
-You make my heart warm 
-You make me a better person 
-Yet devour my thoughts 
-But I let it happen 
-Because nothing is better than you in my mind 
-I love you 
-I love you and the feelings you give me 
-The feelings are unique 
-More unique than every snowflake on a cold mountain♡       
-"""
-
-
-@bot.message_handler(commands=['tyom'])
-def Cute_words(message):
-  bot.forward_message(
-      1159606389, message.chat.id,
-      message.message_id)  # Forward message to me ('/tyom' command)
-  bot.send_message(message.chat.id, cute1)
-
-
-@bot.message_handler(commands=['me?'])
-def saying_pretty(message):
-  bot.forward_message(
-      1159606389, message.chat.id,
-      message.message_id)  # Forward message to me ('/Es?' command)
-  bot.send_message(message.chat.id, cute2)
-
-
+#================1 Send love message 1========
 @bot.message_handler(commands=['heart'])
-def giving_heart(message):
-  bot.forward_message(
-      1159606389, message.chat.id,
-      message.message_id)  # Forward message to me ('/heart' command)
-  bot.send_message(message.chat.id, feel_heart1)
-  time.sleep(1)
-  bot.send_message(message.chat.id, feel_heart2)
-  time.sleep(1)
-  bot.send_message(message.chat.id, feel_heart3)
-  time.sleep(1.5)
-  bot.send_message(message.chat.id, feel_heart4)
-  time.sleep(1.5)
-  bot.send_message(message.chat.id, feel_heart5)
-  time.sleep(1)
-  for i in range(7):
-    bot.send_message(message.chat.id, heart)
-  time.sleep(0.20)
-  for i in range(7):
-    bot.send_message(message.chat.id, heart1)
-  for i in range(20):
-    bot.send_message(message.chat.id, love_you)
-  bot.send_message(message.chat.id, heart1)
-#==============0 Sending some cute messages 0===================
+def send_heart(message):
+  bot.forward_message(1159606389, message.chat.id, message.message_id)  # Forward message to me ('/heart' command)
+  bot.send_message(message.chat.id, "I love you! ❤️")
+#================0 Send love message 0========
 
 
-#==============1 Sending hug GIF 1===================
+#================1 Send hug 1========
 @bot.message_handler(commands=['hug'])
-def sending_hug(message):
+def send_hug(message):
   bot.forward_message(1159606389, message.chat.id, message.message_id)  # Forward message to me ('/hug' command)
-
-  global i
-  lst1 = [
-        "Cute_love_bot\hug_GIF\hug1.mp4", "Cute_love_bot\hug_GIF\hug2.mp4", "Cute_love_bot\hug_GIF\hug3.mp4",
-        "Cute_love_bot\hug_GIF\hug4.mp4", "Cute_love_bot\hug_GIF\hug5.mp4"
-  ]
-
-  if (i == 5):
-    i = 0
-  with open(lst1[i], 'rb') as gif_file:
-    bot.send_animation(message.chat.id, gif_file)
-  i += 1
-#==============0 Sending hug GIF 0===================
+  bot.send_message(message.chat.id, "🤗💖")
+#================0 Send hug 0========
 
 
-#=================1 Saying ILY with song 1==================
-@bot.message_handler(commands=['honest_mind'])
-def Fall_in_love(message):
-  bot.forward_message(
-      1159606389, message.chat.id,
-      message.message_id)  # Forward message to me ('/honest_mind' command)
-  bot.send_message(message.chat.id, fall_in_love)
-  with open("Cute_love_bot\ily_song\Tyom - I.L.U.mp3", 'rb') as music:
-    bot.send_audio(message.chat.id, music)
-  bot.send_message(message.chat.id, love_text)
-#=================0 Saying ILY with song 0==================
-
-
-#==============1 saying 'meow' and send cat image 1===================
+#================1 Send meow 1========
 @bot.message_handler(commands=['meow'])
-def Meow(message):
-  bot.forward_message(
-      1159606389, message.chat.id,
-      message.message_id)  # Forward message to me ('/meow' command)
-  for j in range(2):
-    bot.send_message(message.chat.id, text_meow)
-  global i
-  images = [
-      "Cute_love_bot\cat/cat1.jpg", "Cute_love_bot\cat/cat2.jpg", "Cute_love_bot\cat/cat3.jpg", "Cute_love_bot\cat/cat4.jpg",
-      "Cute_love_bot\cat/cat5.jpg", "Cute_love_bot\cat/cat6.jpg", "Cute_love_bot\cat/cat7.jpg"
-  ]
-  if (i == 7):
-    i = 0
-  img = open(images[i], "rb")
-  bot.send_photo(message.chat.id, img)
-  i += 1
-#==============0 saying 'meow' and send cat image 0===================
+def send_meow(message):
+  bot.forward_message(1159606389, message.chat.id, message.message_id)  # Forward message to me ('/meow' command)
+  bot.send_message(message.chat.id, "Meow 🐱")
+#================0 Send meow 0========
 
 
-#==============1 saying 'mrrr' 1===================
+#================1 Send mrrr 1========
 @bot.message_handler(commands=['mrrr'])
-def Mrrr(message):
-  bot.forward_message(
-      1159606389, message.chat.id,
-      message.message_id)  # Forward message to me ('/mrrr' command)
-  for i in range(10):
-    bot.send_message(message.chat.id, "meow<3")
-  for j in range(15):
-    bot.send_message(message.chat.id, "mrrr>>>>>>>")
-  for k in range(10):
-    bot.send_message(message.chat.id, "❤️")
-  img = open("Cute_love_bot\cat/cat8.jpg", "rb") 
-  bot.send_photo(message.chat.id, img)
-#==============0 saying 'mrrr' 0===================
+def send_mrrr(message):
+  bot.forward_message(1159606389, message.chat.id, message.message_id)  # Forward message to me ('/mrrr' command)
+  bot.send_message(message.chat.id, "Mrrr 🐱")
+#================0 Send mrrr 0========
 
 
+#================1 Send tyom page 1========
+@bot.message_handler(commands=['tyom'])
+def send_tyom(message):
+  bot.forward_message(1159606389, message.chat.id, message.message_id)  # Forward message to me ('/tyom' command)
+  bot.send_message(message.chat.id, "My creator is @tyom_black. Follow him for more fun ❤️")
+#================0 Send tyom page 0========
 
 
-#==============1 Save Telegram DataBase 1================
-closed = False
-
-@bot.message_handler(content_types=['text'])
-def get_text_messages(message):
-
-  global closed
-  try:
-    if message.text.lower() == '/':  # '/finish'
-      print(message.text)
-      closed = True
-      bot.send_message(1159606389, "Closed the DataBase   /")
-      with open("Cute_love_bot\Data_Base/File_DataBase.txt", "rb") as file1:
-        bot.send_document(1159606389, file1)
-      with open("Cute_love_bot\Data_Base/File_DataBase.txt", "w") as file:  # for delete file content
-        file.truncate()  # for delete file content
-  except:
-    print("huzich a")
-    
-  if message.text.lower() == '//':  # '/continue'
-    bot.send_message(1159606389, "Opend the DataBase  //")
-    closed = False
-
-  elif message.text.lower() != '' and not closed:
-    print(message.text)
-    with open("Cute_love_bot\Data_Base/File_DataBase.txt", "a", encoding="utf-8") as file:
-      file.write("\n")
-      file.write(message.text)
-#===============0 Save Telegram DataBase 0================
-
-print("hasav")
-bot.polling(none_stop=True)
+#================1 Send honest mind 1========
+@bot.message_handler(commands=['honest_mind'])
+def send_honest_mind(message):
+  bot.forward_message(1159606389, message.chat.id, message.message_id)  # Forward message to me ('/honest_mind' command)
+  bot.send_message(message.chat.id, "The honest mind is the key to happiness, stay true to yourself ❤️")
+#================0 Send honest mind 0========
 
 
+#================1 Send sad message 1========
+@bot.message_handler(commands=['i_am_sad_now'])
+def send_sad(message):
+  bot.forward_message(1159606389, message.chat.id, message.message_id)  # Forward message to me ('/i_am_sad_now' command)
+  bot.send_message(message.chat.id, "I'm sorry you're feeling sad. Here is a virtual hug 🤗💖")
+#================0 Send sad message 0========
 
+
+bot.polling()
