@@ -12,7 +12,7 @@ bot = telebot.TeleBot(API_KEY, parse_mode=None)
 #===================1 /start COMMAND 1====================
 start1 = "Hi dear "
 start2 = "<3\n"
-start3 = "I'm BOT and i was created by Tyom, 🤗 especially for you, because YOU are an amazing person❤️\nIf you have any questions` text him @tyom_black\n"
+start3 = "I'm BOT and i was created by Tyom, 🤗 especially for you, because YOU are an amazing person❤️\nIf you have any questions` text him @tyomxxx\n"
 start4 = "What is your name?😊"
 
 
@@ -65,22 +65,32 @@ def Send_compliment(message):
 #===================1 GAME 1=================================
 GAME_URL1 = "https://tyomaliengame.netlify.app/"
 
-GAME_URL2 = "https://tyomghostgame.netlify.app/"
+GAME_URL2 = "https://doancongbang1991.github.io/mobileapp/mobile/evilwyrm/"
 
-GAME_URL3 = "https://tyomninjagame.netlify.app/"
+GAME_URL3 = "https://doancongbang1991.github.io/mobileapp/mobile/stickygoo/"
+
+GAME_URL4 = "https://doancongbang1991.github.io/mobileapp/mobile/blackbats/"
+
+GAME_URL5 = "https://doancongbang1991.github.io/mobileapp/mobile/darkninja/"
 
 @bot.message_handler(commands=['game'])
 def start_game(message):
     # Create an inline keyboard with a "game" button
     markup = InlineKeyboardMarkup()
-    game_button1 = InlineKeyboardButton(text="🎮 Play Alien 👽", url=GAME_URL1)
+    game_button1 = InlineKeyboardButton(text="👽 Play Alien 👽", url=GAME_URL1)
     markup.add(game_button1)
 
-    game_button2 = InlineKeyboardButton(text="🎮 Play Ghost 👻", url=GAME_URL2)
+    game_button2 = InlineKeyboardButton(text="🔥🐉 Play Evil Dragon 🐉🔥", url=GAME_URL2)
     markup.add(game_button2)
 
-    game_button3 = InlineKeyboardButton(text="🎮 Play Ninja 🥷", url=GAME_URL3)
+    game_button3 = InlineKeyboardButton(text="🍥 Play Sticky Goo 🍥", url=GAME_URL3)
     markup.add(game_button3)
+
+    game_button4 = InlineKeyboardButton(text="🦇 Play Back bats 🦇", url=GAME_URL4)
+    markup.add(game_button4)
+
+    game_button5 = InlineKeyboardButton(text="🥷 Play Dark Ninja 🥷", url=GAME_URL5)
+    markup.add(game_button5)
 
     # Send a message with the game button
     bot.send_message(message.chat.id, "Click the button below to play the game <3", reply_markup=markup)
