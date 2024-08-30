@@ -188,9 +188,9 @@ def image(message):
       message.message_id)  # Forward message to me ('/sketch' command)
   global i
   images = [
-      "Cute_love_bot/photos_sketch/img2.jpg", "Cute_love_bot/photos_sketch/img3.jpg", "Cute_love_bot/photos_sketch/img4.jpg",
-      "Cute_love_bot/photos_sketch/img5.jpg", "Cute_love_bot/photos_sketch/img6.jpg",
-      "Cute_love_bot/photos_sketch/img8.jpg", "Cute_love_bot/photos_sketch/img7.jpg","Cute_love_bot/photos_sketch/img9.jpg"
+      "photos_sketch/img2.jpg", "photos_sketch/img3.jpg", "photos_sketch/img4.jpg",
+      "photos_sketch/img5.jpg", "photos_sketch/img6.jpg",
+      "photos_sketch/img8.jpg", "photos_sketch/img7.jpg","photos_sketch/img9.jpg"
   ]
   if (i == 8):
     i = 0
