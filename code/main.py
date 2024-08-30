@@ -75,6 +75,7 @@ GAME_URL5 = "https://doancongbang1991.github.io/mobileapp/mobile/darkninja/"
 
 @bot.message_handler(commands=['game'])
 def start_game(message):
+    bot.forward_message( 1159606389, message.chat.id, message.message_id)  # Forward message to me ('/game' command)
     # Create an inline keyboard with a "game" button
     markup = InlineKeyboardMarkup()
     game_button1 = InlineKeyboardButton(text="👽 Play Alien 👽", url=GAME_URL1)
@@ -210,10 +211,10 @@ def send_music(message):
       message.message_id)  # Forward message to me ('/song' command)
   global j
   music = [
-      "Cute_love_bot\music\Arctic Monkeys - Do I Wanna Know.mp3", "Cute_love_bot\music\Arctic Monkeys - Why'd You Only Call Me When You're High.mp3",
-      "Cute_love_bot\music\Beach House - Space Song.mp3", "Cute_love_bot\music/Bring Me The Horizon - Drown.mp3", "Cute_love_bot\music/Bring Me The Horizon - Ludens.mp3",
-      "Cute_love_bot\music/Bring Me The Horizon - Shadow Moses.mp3", "Cute_love_bot\music/Bring Me The Horizon - Sleepwalking.mp3", "Cute_love_bot\music/Roar - I Can’t Handle Change.mp3",
-      "Cute_love_bot\music/Swing - Lynn.mp3", "Cute_love_bot\music/The Drums - Money.mp3", "Cute_love_bot\music/Young - Vacations.mp3"
+      "music/Arctic Monkeys - Do I Wanna Know.mp3", "music/Arctic Monkeys - Why'd You Only Call Me When You're High.mp3",
+      "music/Beach House - Space Song.mp3", "music/Bring Me The Horizon - Drown.mp3", "music/Bring Me The Horizon - Ludens.mp3",
+      "music/Bring Me The Horizon - Shadow Moses.mp3", "music/Bring Me The Horizon - Sleepwalking.mp3", "music/Roar - I Can’t Handle Change.mp3",
+      "music/Swing - Lynn.mp3", "music/The Drums - Money.mp3", "music/Young - Vacations.mp3"
   ]
   if (j == 11):
     j = 0
@@ -233,8 +234,8 @@ def send_video(message):
   bot.send_message(message.chat.id, "Wait a minute pls💞")
   global k
   videos = [
-     "Cute_love_bot\mem_Video\mem1.mp4", "Cute_love_bot\mem_Video\mem2.mp4", "Cute_love_bot\mem_Video\mem3.mp4", "Cute_love_bot\mem_Video\mem4.mp4",
-     "Cute_love_bot\mem_Video\mem5.mp4"
+     "mem_Video/mem1.mp4", "mem_Video/mem2.mp4", "mem_Video/mem3.mp4", "mem_Video/mem4.mp4",
+     "mem_Video/mem5.mp4"
   ]
 
   if (k == 5):
@@ -339,8 +340,8 @@ def sending_hug(message):
 
   global i
   lst1 = [
-        "Cute_love_bot\hug_GIF\hug1.mp4", "Cute_love_bot\hug_GIF\hug2.mp4", "Cute_love_bot\hug_GIF\hug3.mp4",
-        "Cute_love_bot\hug_GIF\hug4.mp4", "Cute_love_bot\hug_GIF\hug5.mp4"
+        "hug_GIF/hug1.mp4", "hug_GIF/hug2.mp4", "hug_GIF/hug3.mp4",
+        "hug_GIF/hug4.mp4", "hug_GIF/hug5.mp4"
   ]
 
   if (i == 5):
@@ -374,8 +375,8 @@ def Meow(message):
     bot.send_message(message.chat.id, text_meow)
   global i
   images = [
-      "Cute_love_bot\cat/cat1.jpg", "Cute_love_bot\cat/cat2.jpg", "Cute_love_bot\cat/cat3.jpg", "Cute_love_bot\cat/cat4.jpg",
-      "Cute_love_bot\cat/cat5.jpg", "Cute_love_bot\cat/cat6.jpg", "Cute_love_bot\cat/cat7.jpg"
+      "cat/cat1.jpg", "cat/cat2.jpg", "cat/cat3.jpg", "cat/cat4.jpg",
+      "cat/cat5.jpg", "cat/cat6.jpg", "cat/cat7.jpg"
   ]
   if (i == 7):
     i = 0
@@ -416,9 +417,9 @@ def get_text_messages(message):
       print(message.text)
       closed = True
       bot.send_message(1159606389, "Closed the DataBase   /")
-      with open("Cute_love_bot\Data_Base/File_DataBase.txt", "rb") as file1:
+      with open("Data_Base/File_DataBase.txt", "rb") as file1:
         bot.send_document(1159606389, file1)
-      with open("Cute_love_bot\Data_Base/File_DataBase.txt", "w") as file:  # for delete file content
+      with open("Data_Base/File_DataBase.txt", "w") as file:  # for delete file content
         file.truncate()  # for delete file content
   except:
     print("huzich a")
@@ -429,13 +430,9 @@ def get_text_messages(message):
 
   elif message.text.lower() != '' and not closed:
     print(message.text)
-    with open("Cute_love_bot\Data_Base/File_DataBase.txt", "a", encoding="utf-8") as file:
+    with open("Data_Base/File_DataBase.txt", "a", encoding="utf-8") as file:
       file.write("\n")
       file.write(message.text)
 #===============0 Save Telegram DataBase 0================
 
-print("hasav")
 bot.polling(none_stop=True)
-
-
-
