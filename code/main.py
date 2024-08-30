@@ -2,7 +2,6 @@ import telebot
 from telebot import types
 import time
 from constants import API_KEY
-from film import search_film
 from compliment import get_random_compliment_from_file
 from motivation import Motivation_quete
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
