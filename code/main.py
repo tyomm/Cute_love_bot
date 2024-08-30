@@ -54,7 +54,7 @@ def start_message(message):
 
 #==============1 Kiss button 1======================================
 @bot.message_handler(commands=['kiss_me'])
-def Send_compliment(message):
+def Send_kiss(message):
   bot.forward_message( 1159606389, message.chat.id, message.message_id)  # Forward message to me ('/kiss_me' command)  
   bot.send_message(message.chat.id, "Sure! Wait a minute..")
   time.sleep(2)
