@@ -41,7 +41,7 @@ def start_message(message):
   button9 = types.KeyboardButton('/mrrr')
   button10 = types.KeyboardButton('/kiss_me')
   button11 = types.KeyboardButton('/film')
-  button12 = types.KeyboardButton('/compliment_me')
+  button12 = types.KeyboardButton('/_me')
   button13 = types.KeyboardButton('/motivation')
   button14 = types.KeyboardButton('/me?')
   button15 = types.KeyboardButton('/i_am_sad_now')
@@ -102,7 +102,7 @@ def start_game(message):
 @bot.message_handler(commands=['compliment_me'])
 def Send_compliment(message):
   bot.forward_message( 1159606389, message.chat.id, message.message_id)  # Forward message to me ('/compliment_me' command)
-  compl_file_path = "Cute_love_bot/code/text_docs/compliments.txt"
+  compl_file_path = "code/text_docs/compliments.txt"
   bot.send_message(message.chat.id, get_random_compliment_from_file(compl_file_path))
 #===================0 Sending Compliments 0=====================
 
@@ -111,7 +111,7 @@ def Send_compliment(message):
 @bot.message_handler(commands=['motivation'])
 def Send_motivation(message):
   bot.forward_message( 1159606389, message.chat.id, message.message_id)  # Forward message to me ('/motivation' command)
-  motiv_file_path = "Cute_love_bot/code/text_docs/motivation.txt"
+  motiv_file_path = "code/text_docs/motivation.txt"
   bot.send_message(message.chat.id, Motivation_quete(motiv_file_path))
 #===================0 Sending Motivation quetos 0=====================
 
