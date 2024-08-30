@@ -359,7 +359,7 @@ def Fall_in_love(message):
       1159606389, message.chat.id,
       message.message_id)  # Forward message to me ('/honest_mind' command)
   bot.send_message(message.chat.id, fall_in_love)
-  with open("Cute_love_bot\ily_song\Tyom - I.L.U.mp3", 'rb') as music:
+  with open("ily_song/Tyom - I.L.U.mp3", 'rb') as music:
     bot.send_audio(message.chat.id, music)
   bot.send_message(message.chat.id, love_text)
 #=================0 Saying ILY with song 0==================
