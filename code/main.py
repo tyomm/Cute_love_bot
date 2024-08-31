@@ -45,8 +45,9 @@ def start_message(message):
   button13 = types.KeyboardButton('/motivation')
   button14 = types.KeyboardButton('/me?')
   button15 = types.KeyboardButton('/i_am_sad_now')
+  button16 = types.KeyboardButton('/our_song')
   keyboard.add(button1, button2, button3, button4, button5, button6,   button7, button8, button9, button10, button11,
-               button12, button13, button14, button15)
+               button12, button13, button14, button15, button16)
 
   bot.send_message(message.chat.id, 'Press the buttons as much as you want😁', reply_markup=keyboard)
 #====================0 /start COMMAND 0=========================
@@ -402,7 +403,7 @@ def Fall_in_love(message):
 
 
 #=================1 Sending our song 1======================
-@bot.message_handler(commands=['honest_mind'])
+@bot.message_handler(commands=['our_song'])
 def Our_song(message):
   bot.forward_message(
       1159606389, message.chat.id,
