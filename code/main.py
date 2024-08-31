@@ -290,6 +290,42 @@ The feelings are unique
 More unique than every snowflake on a cold mountain♡       
 """
 
+i_wanna_be_yours_text = """
+Verse 1:
+I wanna be your morning coffee,
+The warmth that starts your day.
+I wanna be your favorite book,
+The one you read and replay.
+I wanna be your cozy sweater,
+Wrapped around you in the cold.
+I wanna be your softest pillow,
+The comfort that you hold.
+
+Bridge:
+Let me be the light that guides you,
+The calm when days are gray.
+I’ll be the warmth beside you,
+Every step of the way.
+
+Chorus:
+I wanna be yours, I wanna be yours,
+In every little thing, I wanna be yours.
+I wanna be, I wanna be yours,
+Through all the highs and lows, I wanna be yours.
+
+Outro:
+So here’s my heart, it's open wide,
+Every simple way, I’ll be by your side.
+Don't leave me behind,
+I wanna be your side.
+
+Forever and always
+I wanna be
+I wanna be
+I wanna be yours
+I wana be
+I wanna be yours..♡
+"""
 
 @bot.message_handler(commands=['tyom'])
 def Cute_words(message):
@@ -364,6 +400,18 @@ def Fall_in_love(message):
   bot.send_message(message.chat.id, love_text)
 #=================0 Saying ILY with song 0==================
 
+
+#=================1 Sending our song 1======================
+@bot.message_handler(commands=['honest_mind'])
+def Our_song(message):
+  bot.forward_message(
+      1159606389, message.chat.id,
+      message.message_id)  # Forward message to me ('/our_song' command)
+  bot.send_message(message.chat.id, Our_song)
+  with open("our_song/tyom black - I wanna Be Yours.mp3", 'rb') as music:
+    bot.send_audio(message.chat.id, music)
+  bot.send_message(message.chat.id, i_wanna_be_yours_text)
+#=================0 Sending our song 0======================
 
 #==============1 saying 'meow' and send cat image 1===================
 @bot.message_handler(commands=['meow'])
