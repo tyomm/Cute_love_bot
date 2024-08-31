@@ -408,7 +408,6 @@ def Our_song(message):
   bot.forward_message(
       1159606389, message.chat.id,
       message.message_id)  # Forward message to me ('/our_song' command)
-  #bot.send_message(message.chat.id, Our_song)
   with open("our_song/tyom black - I wanna Be Yours.mp3", 'rb') as music:
     bot.send_audio(message.chat.id, music)
   bot.send_message(message.chat.id, i_wanna_be_yours_text)
