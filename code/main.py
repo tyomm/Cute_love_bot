@@ -91,7 +91,7 @@ def start_game(message):
     game_button4 = InlineKeyboardButton(text="🍥 Play Sticky Goo 🍥", url=GAME_URL4)
     markup.add(game_button4)
 
-    game_button5 = InlineKeyboardButton(text="🦇 Play Back bats 🦇", url=GAME_URL5)
+    game_button5 = InlineKeyboardButton(text="🦇 Play Black Bats 🦇", url=GAME_URL5)
     markup.add(game_button5)
 
 
