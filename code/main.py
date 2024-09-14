@@ -250,9 +250,8 @@ def send_video(message):
 
 
 #==============1 Sending some cute messages 1===================
-cute1 = "Yeah? Wanna hug me?🤗"
-cute2 = "Yes! You are very beautiful<3 hehe"
-heart = "💚"
+cute1 = "Yes! You are very beautiful<3 hehe"
+heart = "💜"
 heart1 = "❤️"
 feel_heart1 = "Can you hear the silence?"
 feel_heart2 = "Can you see the dark?"
@@ -333,15 +332,21 @@ def Cute_words(message):
   bot.forward_message(
       1159606389, message.chat.id,
       message.message_id)  # Forward message to me ('/tyom' command)
-  bot.send_message(message.chat.id, cute1)
+  global = i
+  tyom_responce = ["ha jan❤️", "Yeah? wanna hug?🤗","shutup and kiss me💋💜","jana"]
+  if i == 3:
+    i = 0
 
+  bot.send_message(message.chat.id, tyom_responce[i])
+  i += 1
+  
 
 @bot.message_handler(commands=['me?'])
 def saying_pretty(message):
   bot.forward_message(
       1159606389, message.chat.id,
       message.message_id)  # Forward message to me ('/Es?' command)
-  bot.send_message(message.chat.id, cute2)
+  bot.send_message(message.chat.id, cute1)
 
 
 @bot.message_handler(commands=['heart'])
