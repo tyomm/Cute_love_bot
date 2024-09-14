@@ -82,16 +82,16 @@ def start_game(message):
     game_button1 = InlineKeyboardButton(text="👽 Play Alien 👽", url=GAME_URL1)
     markup.add(game_button1)
 
-    game_button5 = InlineKeyboardButton(text="🥷 Play Dark Ninja 🥷", url=GAME_URL2)
+    game_button2 = InlineKeyboardButton(text="🥷 Play Dark Ninja 🥷", url=GAME_URL2)
     markup.add(game_button2)
 
-    game_button2 = InlineKeyboardButton(text="🔥🐉 Play Evil Dragon 🐉🔥", url=GAME_URL3)
+    game_button3 = InlineKeyboardButton(text="🔥🐉 Play Evil Dragon 🐉🔥", url=GAME_URL3)
     markup.add(game_button3)
 
-    game_button3 = InlineKeyboardButton(text="🍥 Play Sticky Goo 🍥", url=GAME_URL4)
+    game_button4 = InlineKeyboardButton(text="🍥 Play Sticky Goo 🍥", url=GAME_URL4)
     markup.add(game_button4)
 
-    game_button4 = InlineKeyboardButton(text="🦇 Play Back bats 🦇", url=GAME_URL5)
+    game_button5 = InlineKeyboardButton(text="🦇 Play Back bats 🦇", url=GAME_URL5)
     markup.add(game_button5)
 
 
