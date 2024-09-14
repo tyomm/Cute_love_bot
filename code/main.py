@@ -45,9 +45,8 @@ def start_message(message):
   button13 = types.KeyboardButton('/motivation')
   button14 = types.KeyboardButton('/me?')
   button15 = types.KeyboardButton('/i_am_sad_now')
-  button16 = types.KeyboardButton('/our_song')
-  button17 = types.KeyboardButton('/test_button')
-  keyboard.add(button17, button1, button2, button3, button4, button5, button6,   button7, button8, button9, button10, button11,
+  button16 = types.KeyboardButton('/isvira_song')
+  keyboard.add(button1, button2, button3, button4, button5, button6,   button7, button8, button9, button10, button11,
                button12, button13, button14, button15, button16)
 
   bot.send_message(message.chat.id, 'Press the buttons as much as you want😁', reply_markup=keyboard)
@@ -404,12 +403,12 @@ def Fall_in_love(message):
 
 
 #=================1 Sending our song 1======================
-@bot.message_handler(commands=['our_song'])
+@bot.message_handler(commands=['isvira_song'])
 def Our_song(message):
   bot.forward_message(
       1159606389, message.chat.id,
       message.message_id)  # Forward message to me ('/our_song' command)
-  with open("our_song/tyom black - I wanna Be Yours.mp3", 'rb') as music:
+  with open("song for isvira/tyom black - I wanna Be Yours.mp3", 'rb') as music:
     bot.send_audio(message.chat.id, music)
   bot.send_message(message.chat.id, i_wanna_be_yours_text)
 #=================0 Sending our song 0======================
