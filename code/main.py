@@ -42,8 +42,8 @@ def start_message(message):
   button10 = types.KeyboardButton('/kiss_me')
   button11 = types.KeyboardButton('/film')
   button12 = types.KeyboardButton('/compliment_me')
-  button13 = types.KeyboardButton('/motivation')
-  button14 = types.KeyboardButton('/me?')
+  button13 = types.KeyboardButton('/me?')
+  button14 = types.KeyboardButton('/motivation')
   button15 = types.KeyboardButton('/i_am_sad_now')
   button16 = types.KeyboardButton('/isvira_song')
   keyboard.add(button1, button2, button3, button4, button5, button6,   button7, button8, button9, button10, button11,
@@ -66,13 +66,13 @@ def Send_kiss(message):
 #===================1 GAME 1=================================
 GAME_URL1 = "https://tyomaliengame.netlify.app/"
 
-GAME_URL2 = "https://doancongbang1991.github.io/mobileapp/mobile/evilwyrm/"
+GAME_URL2 = "https://doancongbang1991.github.io/mobileapp/mobile/darkninja/"
 
 GAME_URL3 = "https://doancongbang1991.github.io/mobileapp/mobile/stickygoo/"
 
 GAME_URL4 = "https://doancongbang1991.github.io/mobileapp/mobile/blackbats/"
 
-GAME_URL5 = "https://doancongbang1991.github.io/mobileapp/mobile/darkninja/"
+GAME_URL5 = "https://doancongbang1991.github.io/mobileapp/mobile/evilwyrm/"
 
 @bot.message_handler(commands=['game'])
 def start_game(message):
@@ -82,17 +82,19 @@ def start_game(message):
     game_button1 = InlineKeyboardButton(text="👽 Play Alien 👽", url=GAME_URL1)
     markup.add(game_button1)
 
-    game_button2 = InlineKeyboardButton(text="🔥🐉 Play Evil Dragon 🐉🔥", url=GAME_URL2)
+    game_button5 = InlineKeyboardButton(text="🥷 Play Dark Ninja 🥷", url=GAME_URL2)
     markup.add(game_button2)
 
-    game_button3 = InlineKeyboardButton(text="🍥 Play Sticky Goo 🍥", url=GAME_URL3)
+    game_button2 = InlineKeyboardButton(text="🔥🐉 Play Evil Dragon 🐉🔥", url=GAME_URL3)
     markup.add(game_button3)
 
-    game_button4 = InlineKeyboardButton(text="🦇 Play Back bats 🦇", url=GAME_URL4)
+    game_button3 = InlineKeyboardButton(text="🍥 Play Sticky Goo 🍥", url=GAME_URL4)
     markup.add(game_button4)
 
-    game_button5 = InlineKeyboardButton(text="🥷 Play Dark Ninja 🥷", url=GAME_URL5)
+    game_button4 = InlineKeyboardButton(text="🦇 Play Back bats 🦇", url=GAME_URL5)
     markup.add(game_button5)
+
+
 
     # Send a message with the game button
     bot.send_message(message.chat.id, "Click the button below to play the game <3", reply_markup=markup)
