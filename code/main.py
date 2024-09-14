@@ -332,7 +332,7 @@ def Cute_words(message):
   bot.forward_message(
       1159606389, message.chat.id,
       message.message_id)  # Forward message to me ('/tyom' command)
-  global = i
+  global i
   tyom_responce = ["ha jan❤️", "Yeah? wanna hug?🤗","shutup and kiss me💋💜","jana"]
   if i == 3:
     i = 0
