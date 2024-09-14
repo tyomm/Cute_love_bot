@@ -263,8 +263,7 @@ feel_heart5 = "Can you feel my heart?"
 love_you = "I Love YOU so fucking much^^"
 text_meow = "meow^^"
 fall_in_love = """
-I wrote a 'song' for you^^ \n
-In other words, there is something in me, that's how I expressed it.
+There is something in me, that's how I expressed it.
 Here is the text, everything comes from my heart..🥹
 """
 love_text = """
