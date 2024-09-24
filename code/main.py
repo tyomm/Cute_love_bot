@@ -45,7 +45,7 @@ def start_message(message):
   button13 = types.KeyboardButton('/me?')
   button14 = types.KeyboardButton('/motivation')
   button15 = types.KeyboardButton('/i_am_sad_now')
-  button16 = types.KeyboardButton('/isvira_song')
+  button16 = types.KeyboardButton('/vanane_song')
   keyboard.add(button1, button2, button3, button4, button5, button6,   button7, button8, button9, button10, button11,
                button12, button13, button14, button15, button16)
 
