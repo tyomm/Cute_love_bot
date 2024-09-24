@@ -409,7 +409,7 @@ def Fall_in_love(message):
 
 
 #=================1 Sending our song 1======================
-@bot.message_handler(commands=['isvira_song'])
+@bot.message_handler(commands=['vanane_song'])
 def Our_song(message):
   bot.forward_message(
       1159606389, message.chat.id,
