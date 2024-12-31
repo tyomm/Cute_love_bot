@@ -45,7 +45,7 @@ def start_message(message):
   button13 = types.KeyboardButton('/me?')
   button14 = types.KeyboardButton('/motivation')
   button15 = types.KeyboardButton('/i_am_sad_now')
-  button16 = types.KeyboardButton('/cloe_song')
+  button16 = types.KeyboardButton('/mane_song')
   keyboard.add(button1, button2, button3, button4, button5, button6,   button7, button8, button9, button10, button11,
                button12, button13, button14, button15, button16)
 
@@ -409,7 +409,7 @@ def Fall_in_love(message):
 
 
 #=================1 Sending our song 1======================
-@bot.message_handler(commands=['cloe_song'])
+@bot.message_handler(commands=['mane_song'])
 def Our_song(message):
   bot.forward_message(
       1159606389, message.chat.id,
@@ -417,6 +417,7 @@ def Our_song(message):
   with open("song for isvira/tyom black - I wanna Be Yours.mp3", 'rb') as music:
     bot.send_audio(message.chat.id, music)
   bot.send_message(message.chat.id, i_wanna_be_yours_text)
+  bot.send_message(message.chat.id, "You deserve this song, so it's yours now💋")
 #=================0 Sending our song 0======================
 
 #==============1 saying 'meow' and send cat image 1===================
