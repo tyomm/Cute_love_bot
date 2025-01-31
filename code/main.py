@@ -24,10 +24,10 @@ def start_message(message):
       message.from_user.first_name and message.from_user.last_name else None)
   bot.forward_message(6921647429, message.chat.id, message.message_id)  # Forward message to me ('/start' command)
 
-  if (nickname):
-    bot.send_message(message.chat.id, start1 + nickname + start2 + start3)
-  else:
-    ask_user(message)
+  # if (nickname):
+  #   bot.send_message(message.chat.id, start1 + nickname + start2 + start3)
+  # else:
+  #   ask_user(message)
 
   keyboard = types.ReplyKeyboardMarkup(row_width=2)
   button1 = types.KeyboardButton('/sketch')
