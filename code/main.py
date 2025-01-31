@@ -471,16 +471,16 @@ def get_text_messages(message):
     if message.text.lower() == '/':  # '/finish'
       print(message.text)
       closed = True
-      bot.send_message(1159606389, "Closed the DataBase   /")
+      bot.send_message(6921647429, "Closed the DataBase   /")
       with open("Data_Base/File_DataBase.txt", "rb") as file1:
-        bot.send_document(1159606389, file1)
+        bot.send_document(6921647429, file1)
       with open("Data_Base/File_DataBase.txt", "w") as file:  # for delete file content
         file.truncate()  # for delete file content
   except:
     print("huzich a")
     
   if message.text.lower() == '//':  # '/continue'
-    bot.send_message(1159606389, "Opend the DataBase  //")
+    bot.send_message(6921647429, "Opend the DataBase  //")
     closed = False
 
   elif message.text.lower() != '' and not closed:
