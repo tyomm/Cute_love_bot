@@ -7,7 +7,7 @@ from compliment import get_random_compliment_from_file
 from motivation import Motivation_quete
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-bot = telebot.TeleBot("7370642379:AAFH9y8634-EEFI9YtrmxxKEN_I7SrUNdV0", parse_mode=None)
+bot = telebot.TeleBot(API_KEY, parse_mode=None)
 
 #===================1 /start COMMAND 1====================
 start1 = "Hi dear "
