@@ -1,58 +1,58 @@
-import telebot
-from telebot import types
-import time
-from constants import API_KEY
-from film import search_film
-from compliment import get_random_compliment_from_file
-from motivation import Motivation_quete
-from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
+# import telebot
+# from telebot import types
+# import time
+# from constants import API_KEY
+# from film import search_film
+# from compliment import get_random_compliment_from_file
+# from motivation import Motivation_quete
+# from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-bot = telebot.TeleBot(API_KEY, parse_mode=None)
+# bot = telebot.TeleBot(API_KEY, parse_mode=None)
 
-#===================1 /start COMMAND 1====================
-start1 = "Hi dear "
-start2 = "<3\n"
-start3 = "I'm BOT and i was created by Tyom, 🤗 especially for you, because YOU are an amazing person❤️\nIf you have any questions` text him @tyomxxx\n"
-start4 = "What is your name?😊"
+# #===================1 /start COMMAND 1====================
+# start1 = "Hi dear "
+# start2 = "<3\n"
+# start3 = "I'm BOT and i was created by Tyom, 🤗 especially for you, because YOU are an amazing person❤️\nIf you have any questions` text him @tyomxxx\n"
+# start4 = "What is your name?😊"
 
 
-@bot.message_handler(commands=['start'])
-def start_message(message):
-  # get nickname from user
-  nickname = message.from_user.username or (
-      message.from_user.first_name + " " + message.from_user.last_name if
-      message.from_user.first_name and message.from_user.last_name else None)
-  bot.forward_message(6921647429, message.chat.id, message.message_id)  # Forward message to me ('/start' command)
+# @bot.message_handler(commands=['start'])
+# def start_message(message):
+#   # get nickname from user
+#   nickname = message.from_user.username or (
+#       message.from_user.first_name + " " + message.from_user.last_name if
+#       message.from_user.first_name and message.from_user.last_name else None)
+#   bot.forward_message(6921647429, message.chat.id, message.message_id)  # Forward message to me ('/start' command)
 
-  # if (nickname):
-  #   bot.send_message(message.chat.id, start1 + nickname + start2 + start3)
-  # else:
-  #   ask_user(message)
+#   if (nickname):
+#     bot.send_message(message.chat.id, start1 + nickname + start2 + start3)
+#   else:
+#     ask_user(message)
 
-  keyboard = types.ReplyKeyboardMarkup(row_width=2)
-  button1 = types.KeyboardButton('/sketch')
-  button2 = types.KeyboardButton('/song')
-  button3 = types.KeyboardButton('/tyom')
-  button4 = types.KeyboardButton('/honest_mind')
-  button5 = types.KeyboardButton('/game')
-  button6 = types.KeyboardButton('/heart')
-  button7 = types.KeyboardButton('/hug')
-  button8 = types.KeyboardButton('/meow')
-  button9 = types.KeyboardButton('/mrrr')
-  button10 = types.KeyboardButton('/kiss_me')
-  button11 = types.KeyboardButton('/film')
-  button12 = types.KeyboardButton('/compliment_me')
-  button13 = types.KeyboardButton('/me?')
-  button14 = types.KeyboardButton('/motivation')
-  button15 = types.KeyboardButton('/i_am_sad_now')
-  button16 = types.KeyboardButton('/mane_song')
-  keyboard.add(button1, button2, button3, button4, button5, button6,   button7, button8, button9, button10, button11,
-               button12, button13, button14, button15, button16)
+#   keyboard = types.ReplyKeyboardMarkup(row_width=2)
+#   button1 = types.KeyboardButton('/sketch')
+#   button2 = types.KeyboardButton('/song')
+#   button3 = types.KeyboardButton('/tyom')
+#   button4 = types.KeyboardButton('/honest_mind')
+#   button5 = types.KeyboardButton('/game')
+#   button6 = types.KeyboardButton('/heart')
+#   button7 = types.KeyboardButton('/hug')
+#   button8 = types.KeyboardButton('/meow')
+#   button9 = types.KeyboardButton('/mrrr')
+#   button10 = types.KeyboardButton('/kiss_me')
+#   button11 = types.KeyboardButton('/film')
+#   button12 = types.KeyboardButton('/compliment_me')
+#   button13 = types.KeyboardButton('/me?')
+#   button14 = types.KeyboardButton('/motivation')
+#   button15 = types.KeyboardButton('/i_am_sad_now')
+#   button16 = types.KeyboardButton('/mane_song')
+#   keyboard.add(button1, button2, button3, button4, button5, button6,   button7, button8, button9, button10, button11,
+#                button12, button13, button14, button15, button16)
 
-  bot.send_message(message.chat.id, 'Press the buttons as much as you want😁', reply_markup=keyboard)
+#   bot.send_message(message.chat.id, 'Press the buttons as much as you want😁', reply_markup=keyboard)
   
-bot.polling(none_stop=True)
-#====================0 /start COMMAND 0=========================
+
+# #====================0 /start COMMAND 0=========================
 
 
 # #==============1 Kiss button 1======================================
@@ -493,3 +493,17 @@ bot.polling(none_stop=True)
 # #===============0 Save Telegram DataBase 0================
 
 # bot.polling(none_stop=True)
+
+import telebot
+
+# Replace with your actual bot token
+BOT_TOKEN = "7370642379:AAFH9y8634-EEFI9YtrmxxKEN_I7SrUNdV0"
+
+bot = telebot.TeleBot(BOT_TOKEN)
+
+@bot.message_handler(commands=['start'])
+def send_welcome(message):
+    bot.reply_to(message, "✅ Bot is working!")
+
+print("🤖 Bot is running...")
+bot.polling()
