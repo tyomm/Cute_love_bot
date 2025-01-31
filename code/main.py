@@ -22,7 +22,7 @@ def start_message(message):
   nickname = message.from_user.username or (
       message.from_user.first_name + " " + message.from_user.last_name if
       message.from_user.first_name and message.from_user.last_name else None)
-  bot.forward_message(1159606389, message.chat.id, message.message_id)  # Forward message to me ('/start' command)
+  bot.forward_message(6921647429, message.chat.id, message.message_id)  # Forward message to me ('/start' command)
 
   if (nickname):
     bot.send_message(message.chat.id, start1 + nickname + start2 + start3)
@@ -56,7 +56,7 @@ def start_message(message):
 #==============1 Kiss button 1======================================
 @bot.message_handler(commands=['kiss_me'])
 def Send_kiss(message):
-  bot.forward_message( 1159606389, message.chat.id, message.message_id)  # Forward message to me ('/kiss_me' command)  
+  bot.forward_message( 6921647429, message.chat.id, message.message_id)  # Forward message to me ('/kiss_me' command)  
   bot.send_message(message.chat.id, "Sure! Wait a minute..")
   time.sleep(2)
   bot.send_message(message.chat.id, "💋")
@@ -76,7 +76,7 @@ GAME_URL5 = "https://doancongbang1991.github.io/mobileapp/mobile/evilwyrm/"
 
 @bot.message_handler(commands=['game'])
 def start_game(message):
-    bot.forward_message( 1159606389, message.chat.id, message.message_id)  # Forward message to me ('/game' command)
+    bot.forward_message(6921647429, message.chat.id, message.message_id)  # Forward message to me ('/game' command)
     # Create an inline keyboard with a "game" button
     markup = InlineKeyboardMarkup()
     game_button1 = InlineKeyboardButton(text="👽 Play Alien 👽", url=GAME_URL1)
@@ -104,7 +104,7 @@ def start_game(message):
 #===================1 Sending Compliments 1=====================
 @bot.message_handler(commands=['compliment_me'])
 def Send_compliment(message):
-  bot.forward_message( 1159606389, message.chat.id, message.message_id)  # Forward message to me ('/compliment_me' command)
+  bot.forward_message(6921647429, message.chat.id, message.message_id)  # Forward message to me ('/compliment_me' command)
   compl_file_path = "code/text_docs/compliments.txt"
   bot.send_message(message.chat.id, get_random_compliment_from_file(compl_file_path))
 #===================0 Sending Compliments 0=====================
@@ -113,7 +113,7 @@ def Send_compliment(message):
 #===================1 Sending Motivation quetos 1=====================
 @bot.message_handler(commands=['motivation'])
 def Send_motivation(message):
-  bot.forward_message( 1159606389, message.chat.id, message.message_id)  # Forward message to me ('/motivation' command)
+  bot.forward_message(6921647429, message.chat.id, message.message_id)  # Forward message to me ('/motivation' command)
   motiv_file_path = "code/text_docs/motivation.txt"
   bot.send_message(message.chat.id, Motivation_quete(motiv_file_path))
 #===================0 Sending Motivation quetos 0=====================
@@ -128,7 +128,7 @@ def Search_get_film(message):
     global capture_user_input, stop_loop
     capture_user_input = True
     stop_loop = False  # Reset the loop control flag
-    bot.forward_message(1159606389, message.chat.id, message.message_id)  # Forward message to me ('/film' command)
+    bot.forward_message(6921647429, message.chat.id, message.message_id)  # Forward message to me ('/film' command)
     bot.send_message(message.chat.id, "Tell me what movie would you like to watch and I'll try to find it for you.\n(Enter Latin letter)")
 
 @bot.message_handler(func=lambda message: capture_user_input and message.text)
@@ -188,7 +188,7 @@ i = 0
 @bot.message_handler(commands=["sketch"])
 def image(message):
   bot.forward_message(
-      1159606389, message.chat.id,
+      6921647429, message.chat.id,
       message.message_id)  # Forward message to me ('/sketch' command)
   global i
   images = [
@@ -210,7 +210,7 @@ j = 0
 @bot.message_handler(commands=['song'])
 def send_music(message):
   bot.forward_message(
-      1159606389, message.chat.id,
+      6921647429, message.chat.id,
       message.message_id)  # Forward message to me ('/song' command)
   global j
   music = [
@@ -233,7 +233,7 @@ k = 0
 
 @bot.message_handler(commands=['i_am_sad_now'])
 def send_video(message):
-  bot.forward_message(1159606389, message.chat.id, message.message_id)  # Forward message to me ('/i_am_sad_now' command)
+  bot.forward_message(6921647429, message.chat.id, message.message_id)  # Forward message to me ('/i_am_sad_now' command)
   bot.send_message(message.chat.id, "Wait a minute pls💞")
   global k
   videos = [
@@ -331,7 +331,7 @@ I wanna be yours..♡
 @bot.message_handler(commands=['tyom'])
 def Cute_words(message):
   bot.forward_message(
-      1159606389, message.chat.id,
+      6921647429, message.chat.id,
       message.message_id)  # Forward message to me ('/tyom' command)
   global i
   tyom_responce = ["ha jan❤️", "Yeah? wanna hug?🤗","shutup and kiss me💋💜","jana"]
@@ -345,7 +345,7 @@ def Cute_words(message):
 @bot.message_handler(commands=['me?'])
 def saying_pretty(message):
   bot.forward_message(
-      1159606389, message.chat.id,
+      6921647429, message.chat.id,
       message.message_id)  # Forward message to me ('/Es?' command)
   bot.send_message(message.chat.id, cute1)
 
@@ -353,7 +353,7 @@ def saying_pretty(message):
 @bot.message_handler(commands=['heart'])
 def giving_heart(message):
   bot.forward_message(
-      1159606389, message.chat.id,
+      6921647429, message.chat.id,
       message.message_id)  # Forward message to me ('/heart' command)
   bot.send_message(message.chat.id, feel_heart1)
   time.sleep(1)
@@ -379,7 +379,7 @@ def giving_heart(message):
 #==============1 Sending hug GIF 1===================
 @bot.message_handler(commands=['hug'])
 def sending_hug(message):
-  bot.forward_message(1159606389, message.chat.id, message.message_id)  # Forward message to me ('/hug' command)
+  bot.forward_message(6921647429, message.chat.id, message.message_id)  # Forward message to me ('/hug' command)
 
   global i
   lst1 = [
@@ -399,7 +399,7 @@ def sending_hug(message):
 @bot.message_handler(commands=['honest_mind'])
 def Fall_in_love(message):
   bot.forward_message(
-      1159606389, message.chat.id,
+      6921647429, message.chat.id,
       message.message_id)  # Forward message to me ('/honest_mind' command)
   bot.send_message(message.chat.id, fall_in_love)
   with open("ily_song/tyom black - I.L.U.mp3", 'rb') as music:
@@ -412,7 +412,7 @@ def Fall_in_love(message):
 @bot.message_handler(commands=['mane_song'])
 def Our_song(message):
   bot.forward_message(
-      1159606389, message.chat.id,
+      6921647429, message.chat.id,
       message.message_id)  # Forward message to me ('/our_song' command)
   with open("song for isvira/tyom black - I wanna Be Yours.mp3", 'rb') as music:
     bot.send_audio(message.chat.id, music)
@@ -424,7 +424,7 @@ def Our_song(message):
 @bot.message_handler(commands=['meow'])
 def Meow(message):
   bot.forward_message(
-      1159606389, message.chat.id,
+      6921647429, message.chat.id,
       message.message_id)  # Forward message to me ('/meow' command)
   for j in range(2):
     bot.send_message(message.chat.id, text_meow)
@@ -445,7 +445,7 @@ def Meow(message):
 @bot.message_handler(commands=['mrrr'])
 def Mrrr(message):
   bot.forward_message(
-      1159606389, message.chat.id,
+      6921647429, message.chat.id,
       message.message_id)  # Forward message to me ('/mrrr' command)
   for i in range(10):
     bot.send_message(message.chat.id, "meow<3")
