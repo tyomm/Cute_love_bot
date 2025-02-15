@@ -45,7 +45,8 @@ def start_message(message):
   button13 = types.KeyboardButton('/me?')
   button14 = types.KeyboardButton('/motivation')
   button15 = types.KeyboardButton('/i_am_sad_now')
-  button16 = types.KeyboardButton('/Annabelle_song')
+  #button16 = types.KeyboardButton('/Annabelle_song')
+  button16 = types.KeyboardButton('/Amira_song')
   keyboard.add(button1, button2, button3, button4, button5, button6,   button7, button8, button9, button10, button11,
                button12, button13, button14, button15, button16)
 
@@ -264,10 +265,13 @@ feel_heart4 = "Can you..?"
 feel_heart5 = "Can you feel my heart?"
 love_you = "I Love YOU so fucking much^^"
 text_meow = "meow^^"
-fall_in_love = """
-There is something in me, that's how I expressed it.
-Here is the text, everything comes from my heart..🥹
-"""
+fall_in_love = "Now this is for you🥹"
+
+#fall_in_love = """
+#There is something in me, that's how I expressed it.
+#Here is the text, everything comes from my heart..🥹
+#"""
+
 love_text = """
 I hate this word 
 Love 
