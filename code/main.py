@@ -469,23 +469,26 @@ def Mrrr(message):
   bot.send_photo(message.chat.id, img)
 #==============0 saying 'mrrr' 0===================
 
-
 #===================1 sending msg every day that count our meeting in december 1========================
-USER_CHAT_ID = 7843995956
+
+USER_CHAT_ID = 7843995956  # Change to your user chat ID
 MESSAGE_FILE = "code/text_docs/kind_messages.txt"
+
+MESSAGES_PER_DAY = 3
+START_DATE = datetime(2025, 1, 1, tzinfo=pytz.timezone("Asia/Tokyo"))
+
+JST = pytz.timezone("Asia/Tokyo")
 
 # Load messages skipping empty lines
 with open(MESSAGE_FILE, "r", encoding="utf-8") as f:
     messages = [line.strip() for line in f if line.strip()]
 
-MESSAGES_PER_DAY = 3
-START_DATE = datetime(2025, 1, 1, tzinfo=pytz.timezone("Asia/Tokyo"))  # your actual messaging start date in JST
+current_index = 0  # tracks the next message to send globally
 
-# Japan timezone
-JST = pytz.timezone("Asia/Tokyo")
 
 def get_japan_now():
     return datetime.now(JST)
+
 
 def wait_until(dt):
     now = get_japan_now()
@@ -494,66 +497,58 @@ def wait_until(dt):
         print(f"Waiting {wait_seconds:.0f} seconds until {dt.time()} JST")
         time_module.sleep(wait_seconds)
 
+
 def send_messages_for_today():
     global current_index
 
     now = get_japan_now()
     today_date = now.date()
 
-    # Calculate how many days passed since START_DATE (in Japan timezone)
     start_date_local = START_DATE.astimezone(JST).date()
     days_passed = (today_date - start_date_local).days
     if days_passed < 0:
         days_passed = 0
 
-    # Calculate today's message index range
     day_start_index = days_passed * MESSAGES_PER_DAY
-    day_end_index = day_start_index + MESSAGES_PER_DAY
+    day_end_index = min(day_start_index + MESSAGES_PER_DAY, len(messages))
 
-    # Clamp to total messages
-    day_end_index = min(day_end_index, len(messages))
-
-    # If current_index is behind today’s start, jump to today
+    # If current_index is behind today's start, jump to today's messages
     if current_index < day_start_index:
         current_index = day_start_index
 
-    # Define sending window (8 AM to 2 AM next day)
-    send_start = datetime.combine(today_date, time(8,0), tzinfo=JST)
-    send_end = datetime.combine(today_date + timedelta(days=1), time(2,0), tzinfo=JST)
+    # Define sending window 8:00 AM to 2:00 AM next day JST
+    send_start = datetime.combine(today_date, time(8, 0), tzinfo=JST)
+    send_end = datetime.combine(today_date + timedelta(days=1), time(2, 0), tzinfo=JST)
 
-    # If now before sending window, wait till 8 AM JST
+    # If before sending window, wait till 8 AM JST
     if now < send_start:
+        print("Before sending window. Waiting until 8:00 AM JST...")
         wait_until(send_start)
         now = get_japan_now()
 
-    # If now after sending window (past 2 AM JST), no messages today, move to next day
+    # If after sending window, skip today and wait until next day 8 AM
     if now >= send_end:
-        print("Past sending window for today. Wait until next day 8 AM.")
+        print("Past sending window for today. Waiting until next day 8:00 AM JST...")
         next_day_start = send_start + timedelta(days=1)
         wait_until(next_day_start)
         return
 
-    # Calculate how much time left in sending window
-    total_seconds_left = (send_end - now).total_seconds()
-
-    # Number of messages left to send today
     messages_left = day_end_index - current_index
     if messages_left <= 0:
         print("All messages for today sent or no messages today.")
         return
 
-    # Randomly distribute the remaining time among messages_left
-    # For simplicity, generate random weights and scale to total_seconds_left
+    total_seconds_left = (send_end - now).total_seconds()
+
+    # Generate random delays to space messages in remaining time
     weights = [random.random() for _ in range(messages_left)]
     total_weight = sum(weights)
     delays = [total_seconds_left * (w / total_weight) for w in weights]
 
     for delay, msg_index in zip(delays, range(current_index, day_end_index)):
-        # Send message
         msg = messages[msg_index]
         bot.send_message(USER_CHAT_ID, msg)
         print(f"Sent message #{msg_index + 1}: {msg}")
-
         current_index += 1
 
         if delay > 0:
@@ -562,43 +557,50 @@ def send_messages_for_today():
 
     print("Finished today's messages.")
 
-current_index = 0
 
-# Call your function:
-send_messages_for_today()
+def message_sender_loop():
+    while True:
+        try:
+            send_messages_for_today()
+        except Exception as e:
+            print(f"Error in sending messages: {e}")
+        # Wait 5 minutes before next check to avoid CPU spinning
+        time_module.sleep(300)
 #===================0 sending msg every day that count our meeting in december 0========================
 
 
-#==============1 Save Telegram DataBase 1================
+# === Telegram message handler for saving text messages to database ===
 closed = False
+
 
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
+    global closed
+    try:
+        if message.text.lower() == '/':  # command to close database
+            print(message.text)
+            closed = True
+            bot.send_message(6921647429, "Closed the DataBase /")
+            with open("Data_Base/File_DataBase.txt", "rb") as file1:
+                bot.send_document(6921647429, file1)
+            with open("Data_Base/File_DataBase.txt", "w") as file:
+                file.truncate()
+        elif message.text.lower() == '//':  # command to open database
+            bot.send_message(6921647429, "Opened the DataBase //")
+            closed = False
+        elif message.text.strip() != '' and not closed:
+            print(message.text)
+            with open("Data_Base/File_DataBase.txt", "a", encoding="utf-8") as file:
+                file.write("\n")
+                file.write(message.text)
+    except Exception as e:
+        print(f"Error in message handler: {e}")
 
-  global closed
-  try:
-    if message.text.lower() == '/':  # '/finish'
-      print(message.text)
-      closed = True
-      bot.send_message(6921647429, "Closed the DataBase   /")
-      with open("Data_Base/File_DataBase.txt", "rb") as file1:
-        bot.send_document(6921647429, file1)
-      with open("Data_Base/File_DataBase.txt", "w") as file:  # for delete file content
-        file.truncate()  # for delete file content
-  except:
-    print("huzich a")
-    
-  if message.text.lower() == '//':  # '/continue'
-    bot.send_message(6921647429, "Opend the DataBase  //")
-    closed = False
 
-  elif message.text.lower() != '' and not closed:
-    print(message.text)
-    with open("Data_Base/File_DataBase.txt", "a", encoding="utf-8") as file:
-      file.write("\n")
-      file.write(message.text)
-#===============0 Save Telegram DataBase 0================
-threading.Thread(target=send_three_messages_daily, daemon=True).start()
+# Start sending messages in a separate thread
+threading.Thread(target=message_sender_loop, daemon=True).start()
 
+# Start bot polling (this runs forever)
 bot.infinity_polling()
+
 
