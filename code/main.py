@@ -463,56 +463,56 @@ def Mrrr(message):
 #==============0 saying 'mrrr' 0===================
 
 
-# #===================1 sending msg every day that count our meeting in december 1========================
-# # BOT_TOKEN = "7908924193:AAEfRbsWdrR2VA8YA5Y7RumX_9x2d_RZvtQ"
-# USER_CHAT_ID = 7843995956  # Replace with your girlfriend's Telegram user ID # 7843995956
+#===================1 sending msg every day that count our meeting in december 1========================
+# BOT_TOKEN = "7908924193:AAEfRbsWdrR2VA8YA5Y7RumX_9x2d_RZvtQ"
+USER_CHAT_ID = 7843995956  # Replace with your girlfriend's Telegram user ID # 7843995956
 
-# # === FILE SETUP ===
-# MESSAGE_FILE = "code/text_docs/kind_messages.txt"
+# === FILE SETUP ===
+MESSAGE_FILE = "code/text_docs/kind_messages.txt"
 
-# # Load all messages from the file
-# with open(MESSAGE_FILE, "r", encoding="utf-8") as f:
-#     messages = [line.strip() for line in f if line.strip()]
+# Load all messages from the file
+with open(MESSAGE_FILE, "r", encoding="utf-8") as f:
+    messages = [line.strip() for line in f if line.strip()]
 
-# current_index = 0  # index of the next message to send
+current_index = 0  # index of the next message to send
 
-# # === SEND A SINGLE MESSAGE ===
-# def send_next_message():
-#     global current_index
-#     if current_index < len(messages):
-#         msg = messages[current_index]
-#         bot.send_message(USER_CHAT_ID, msg)
-#         print(f"Sent message #{current_index + 1}: {msg}")
-#         current_index += 1
-#     else:
-#         print("✅ All messages have been sent!")
+# === SEND A SINGLE MESSAGE ===
+def send_next_message():
+    global current_index
+    if current_index < len(messages):
+        msg = messages[current_index]
+        bot.send_message(USER_CHAT_ID, msg)
+        print(f"Sent message #{current_index + 1}: {msg}")
+        current_index += 1
+    else:
+        print("✅ All messages have been sent!")
 
-# # === DAILY MESSAGE LOGIC ===
-# def send_three_messages_daily():
-#     global current_index
+# === DAILY MESSAGE LOGIC ===
+def send_three_messages_daily():
+    global current_index
 
-#     while current_index < len(messages):
-#         for _ in range(3):  # send 3 messages per day
-#             if current_index >= len(messages):
-#                 break
-#             send_next_message()
+    while current_index < len(messages):
+        for _ in range(3):  # send 3 messages per day
+            if current_index >= len(messages):
+                break
+            send_next_message()
 
-#             # === 🔁 DELAY SETTINGS ===
+            # === 🔁 DELAY SETTINGS ===
 
-#             TEST_MODE = True  # ✅ Set to False when you're ready for real timing
+            TEST_MODE = True  # ✅ Set to False when you're ready for real timing
 
-#             if TEST_MODE:
-#                 delay_seconds = 30
-#                 print(f"🧪 Test mode: waiting {delay_seconds} seconds before next message...")
-#                 time.sleep(delay_seconds)
-#             else:
-#                 delay_hours = 4 + (4 * random.random())  # 4 to 8 hours
-#                 print(f"⏳ Waiting {delay_hours:.2f} hours before next message...")
-#                 time.sleep(delay_hours * 3600)
+            if TEST_MODE:
+                delay_seconds = 30
+                print(f"🧪 Test mode: waiting {delay_seconds} seconds before next message...")
+                time.sleep(delay_seconds)
+            else:
+                delay_hours = 4 + (4 * random.random())  # 4 to 8 hours
+                print(f"⏳ Waiting {delay_hours:.2f} hours before next message...")
+                time.sleep(delay_hours * 3600)
 
-#         print("📆 Finished today's 3 messages. Waiting 1 hour to simulate next day...")
-#         time.sleep(3600)  # adjust as needed, or simulate next day
-# #===================0 sending msg every day that count our meeting in december 0========================
+        print("📆 Finished today's 3 messages. Waiting 1 hour to simulate next day...")
+        time.sleep(3600)  # adjust as needed, or simulate next day
+#===================0 sending msg every day that count our meeting in december 0========================
 
 
 #==============1 Save Telegram DataBase 1================
