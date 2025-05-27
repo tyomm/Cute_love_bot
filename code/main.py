@@ -6,6 +6,7 @@ from film import search_film
 from compliment import get_random_compliment_from_file
 from motivation import Motivation_quete
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
+import threading
 
 bot = telebot.TeleBot(API_KEY, parse_mode=None)
 
@@ -543,21 +544,7 @@ def get_text_messages(message):
       file.write("\n")
       file.write(message.text)
 #===============0 Save Telegram DataBase 0================
-# threading.Thread(target=send_three_messages_daily, daemon=True).start()
+threading.Thread(target=send_three_messages_daily, daemon=True).start()
 
 bot.infinity_polling()
-# bot.polling(none_stop=True)
 
-# import telebot
-
-# # Replace with your actual bot token
-# BOT_TOKEN = "7370642379:AAFH9y8634-EEFI9YtrmxxKEN_I7SrUNdV0"
-
-# bot = telebot.TeleBot(BOT_TOKEN)
-
-# @bot.message_handler(commands=['start'])
-# def send_welcome(message):
-#     bot.reply_to(message, "✅ Bot is working!")
-
-# print("🤖 Bot is running...")
-# bot.polling()
