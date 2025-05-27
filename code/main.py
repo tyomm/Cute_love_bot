@@ -546,7 +546,8 @@ def get_text_messages(message):
 #===============0 Save Telegram DataBase 0================
 threading.Thread(target=send_three_messages_daily, daemon=True).start()
 
-bot.polling(none_stop=True)
+bot.infinity_polling()
+# bot.polling(none_stop=True)
 
 # import telebot
 
