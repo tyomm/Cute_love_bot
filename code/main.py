@@ -6,12 +6,13 @@ from film import search_film
 from compliment import get_random_compliment_from_file
 from motivation import Motivation_quete
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
-import threading
-import random
-import datetime
-from zoneinfo import ZoneInfo
-import time as time_module
-import pytz
+
+# import threading
+# import random
+# import datetime
+# from zoneinfo import ZoneInfo
+# import time as time_module
+# import pytz
 
 
 bot = telebot.TeleBot(API_KEY, parse_mode=None)
