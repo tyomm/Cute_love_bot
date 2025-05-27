@@ -544,7 +544,7 @@ def get_text_messages(message):
       file.write("\n")
       file.write(message.text)
 #===============0 Save Telegram DataBase 0================
-threading.Thread(target=send_three_messages_daily, daemon=True).start()
+# threading.Thread(target=send_three_messages_daily, daemon=True).start()
 
 bot.infinity_polling()
 # bot.polling(none_stop=True)
