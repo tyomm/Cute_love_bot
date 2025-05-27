@@ -488,12 +488,12 @@ def send_next_message():
         print(f"Sent message #{current_index + 1}: {msg}")
         current_index += 1
     else:
-        print("✅ All messages have been sent!")
+        print("All messages have been sent!")
 
 # === DAILY MESSAGE LOGIC ===
 def send_three_messages_daily():
     global current_index
-    TEST_MODE = True  #✅ Set to False when you're ready for real timing
+    TEST_MODE = False  #✅ Set to False when you're ready for real timing
 
     while current_index < len(messages):
         total_delay_hours = 0
