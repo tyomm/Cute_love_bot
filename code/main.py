@@ -465,8 +465,7 @@ def Mrrr(message):
 
 
 #===================1 sending msg every day that count our meeting in december 1========================
-# BOT_TOKEN = "7908924193:AAEfRbsWdrR2VA8YA5Y7RumX_9x2d_RZvtQ"
-USER_CHAT_ID = 7843995956  # Replace with your girlfriend's Telegram user ID # 7843995956
+USER_CHAT_ID = 7843995956  # Replace with your girlfriend's Telegram user ID
 
 # === FILE SETUP ===
 MESSAGE_FILE = "code/text_docs/kind_messages.txt"
@@ -493,25 +492,35 @@ def send_three_messages_daily():
     global current_index
 
     while current_index < len(messages):
+        total_delay_hours = 0
+
         for _ in range(3):  # send 3 messages per day
             if current_index >= len(messages):
                 break
+
             send_next_message()
 
-            # === 🔁 DELAY SETTINGS ===
             TEST_MODE = True  # ✅ Set to False when you're ready for real timing
 
             if TEST_MODE:
                 delay_seconds = 30
+                total_delay_hours += delay_seconds / 3600
                 print(f"🧪 Test mode: waiting {delay_seconds} seconds before next message...")
                 time.sleep(delay_seconds)
             else:
                 delay_hours = 4 + (4 * random.random())  # 4 to 8 hours
+                total_delay_hours += delay_hours
                 print(f"⏳ Waiting {delay_hours:.2f} hours before next message...")
                 time.sleep(delay_hours * 3600)
 
-        print("📆 Finished today's 3 messages. Waiting 1 hour to simulate next day...")
-        time.sleep(3600)  # adjust as needed, or simulate next day
+        # After sending 3 messages, wait remaining hours to complete 24h
+        if not TEST_MODE:
+            remaining_hours = max(0, 24 - total_delay_hours)
+            print(f"🌙 Waiting {remaining_hours:.2f} hours until next day's messages...")
+            time.sleep(remaining_hours * 3600)
+        else:
+            print("🧪 Test mode: simulating 'next day' wait with 10 seconds...")
+            time.sleep(10)
 #===================0 sending msg every day that count our meeting in december 0========================
 
 
