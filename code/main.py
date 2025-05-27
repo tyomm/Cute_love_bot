@@ -7,6 +7,7 @@ from compliment import get_random_compliment_from_file
 from motivation import Motivation_quete
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 import threading
+import random
 
 bot = telebot.TeleBot(API_KEY, parse_mode=None)
 
