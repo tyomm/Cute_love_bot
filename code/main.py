@@ -472,109 +472,103 @@ def Mrrr(message):
 #==============0 saying 'mrrr' 0===================
 
 #===================1 sending msg every day that count our meeting in december 1========================
-
-from datetime import datetime, timedelta, time
-import pytz
-import random
-import time as time_module
-
-# Your existing constants
-USER_CHAT_ID = 7843995956
+USER_CHAT_ID = 7843995956  # Replace with your girlfriend's Telegram user ID
 MESSAGE_FILE = "code/text_docs/kind_messages.txt"
 
-# Load messages skipping empty lines
 with open(MESSAGE_FILE, "r", encoding="utf-8") as f:
     messages = [line.strip() for line in f if line.strip()]
 
-MESSAGES_PER_DAY = 3
-START_DATE = datetime(2025, 1, 1, tzinfo=pytz.timezone("Asia/Tokyo"))  # your actual messaging start date in JST
-
-# Japan timezone
-JST = pytz.timezone("Asia/Tokyo")
-
-def get_japan_now():
-    return datetime.now(JST)
-
-def wait_until(dt):
-    now = get_japan_now()
-    wait_seconds = (dt - now).total_seconds()
-    if wait_seconds > 0:
-        print(f"Waiting {wait_seconds:.0f} seconds until {dt.time()} JST")
-        time_module.sleep(wait_seconds)
-
-def send_messages_for_today():
-    global current_index
-
-    now = get_japan_now()
-    today_date = now.date()
-
-    # Calculate how many days passed since START_DATE (in Japan timezone)
-    start_date_local = START_DATE.astimezone(JST).date()
-    days_passed = (today_date - start_date_local).days
-    if days_passed < 0:
-        days_passed = 0
-
-    # Calculate today's message index range
-    day_start_index = days_passed * MESSAGES_PER_DAY
-    day_end_index = day_start_index + MESSAGES_PER_DAY
-
-    # Clamp to total messages
-    day_end_index = min(day_end_index, len(messages))
-
-    # If current_index is behind today’s start, jump to today
-    if current_index < day_start_index:
-        current_index = day_start_index
-
-    # Define sending window (8 AM to 2 AM next day)
-    send_start = datetime.combine(today_date, time(8,0), tzinfo=JST)
-    send_end = datetime.combine(today_date + timedelta(days=1), time(2,0), tzinfo=JST)
-
-    # If now before sending window, wait till 8 AM JST
-    if now < send_start:
-        wait_until(send_start)
-        now = get_japan_now()
-
-    # If now after sending window (past 2 AM JST), no messages today, move to next day
-    if now >= send_end:
-        print("Past sending window for today. Wait until next day 8 AM.")
-        next_day_start = send_start + timedelta(days=1)
-        wait_until(next_day_start)
-        return
-
-    # Calculate how much time left in sending window
-    total_seconds_left = (send_end - now).total_seconds()
-
-    # Number of messages left to send today
-    messages_left = day_end_index - current_index
-    if messages_left <= 0:
-        print("All messages for today sent or no messages today.")
-        return
-
-    # Randomly distribute the remaining time among messages_left
-    # For simplicity, generate random weights and scale to total_seconds_left
-    weights = [random.random() for _ in range(messages_left)]
-    total_weight = sum(weights)
-    delays = [total_seconds_left * (w / total_weight) for w in weights]
-
-    for delay, msg_index in zip(delays, range(current_index, day_end_index)):
-        # Send message
-        msg = messages[msg_index]
-        bot.send_message(USER_CHAT_ID, msg)
-        print(f"Sent message #{msg_index + 1}: {msg}")
-
-        current_index += 1
-
-        if delay > 0:
-            print(f"Waiting {delay:.0f} seconds before next message...")
-            time_module.sleep(delay)
-
-    print("Finished today's messages.")
-
 current_index = 0
 
-# Call your function:
-send_messages_for_today()
+def send_next_message():
+    global current_index
+    if current_index < len(messages):
+        msg = messages[current_index]
+        bot.send_message(USER_CHAT_ID, msg)
+        print(f"Sent message #{current_index + 1}: {msg}")
+        current_index += 1
+    else:
+        print("✅ All messages have been sent!")
 
+def get_japan_now():
+    return datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
+
+def get_next_2am(now):
+    """Get the next 2AM JST datetime from now"""
+    candidate = now.replace(hour=2, minute=0, second=0, microsecond=0)
+    if now >= candidate:
+        candidate += datetime.timedelta(days=1)
+    return candidate
+
+def wait_until_8am():
+    now = get_japan_now()
+    eight_am = now.replace(hour=8, minute=0, second=0, microsecond=0)
+    if now >= eight_am:
+        return
+    wait_sec = (eight_am - now).total_seconds()
+    print(f"🌙 Waiting {wait_sec/3600:.2f} hours until 8AM JST...")
+    time.sleep(wait_sec)
+
+def send_three_messages_daily():
+    global current_index
+    TEST_MODE = False
+
+    while current_index < len(messages):
+        now = get_japan_now()
+        # If between 2AM and 8AM JST, wait till 8AM
+        if 2 <= now.hour < 8:
+            wait_until_8am()
+            now = get_japan_now()
+
+        next_2am = get_next_2am(now)
+        remaining_seconds = (next_2am - now).total_seconds()
+        
+        if remaining_seconds < 30:  # less than 30 seconds to 2AM, wait till 8AM next day
+            wait_until_8am()
+            continue
+
+        # We must send exactly 3 messages within remaining_seconds (<= 18 hours * 3600)
+        # Split remaining_seconds randomly into 3 intervals (delays between messages)
+        if TEST_MODE:
+            delays = [5, 5, 5]  # 5 seconds for testing
+        else:
+            # Generate 3 random weights
+            weights = [random.random() for _ in range(3)]
+            total_weight = sum(weights)
+            # Multiply by remaining_seconds, but subtract some seconds to avoid going past 2AM
+            total_window = remaining_seconds * 0.9  # keep 10% buffer to avoid edge cases
+            delays = [(w / total_weight) * total_window for w in weights]
+
+        for delay in delays:
+            if current_index >= len(messages):
+                break
+
+            send_next_message()
+
+            # Wait delay before sending next message, except after last message
+            if current_index == len(messages):
+                break
+
+            if TEST_MODE:
+                print(f"🧪 Test mode: waiting 5 seconds before next message...")
+                time.sleep(5)
+            else:
+                now = get_japan_now()
+                # If waiting delay goes into forbidden hours (2AM - 8AM), cut wait and wait till 8AM
+                potential_next_time = now + datetime.timedelta(seconds=delay)
+                if 2 <= potential_next_time.hour < 8:
+                    wait_until_8am()
+                else:
+                    print(f"⏳ Waiting {delay/3600:.2f} hours before next message...")
+                    time.sleep(delay)
+
+        # After sending today's 3 messages, wait until 8AM next day before next batch
+        now = get_japan_now()
+        next_day_8am = (now + datetime.timedelta(days=1)).replace(hour=8, minute=0, second=0, microsecond=0)
+        wait_seconds = (next_day_8am - now).total_seconds()
+        print(f"🌙 All 3 messages sent for today. Waiting {wait_seconds/3600:.2f} hours until 8AM JST next day...")
+        time.sleep(wait_seconds)
+#===================0 sending msg every day that count our meeting in december 0========================
 
 
 #==============1 Save Telegram DataBase 1================
