@@ -13,6 +13,8 @@ from zoneinfo import ZoneInfo
 import time as time_module
 import pytz
 import time as time_module
+from datetime import datetime, timedelta, time
+
 
 bot = telebot.TeleBot(API_KEY, parse_mode=None)
 
@@ -471,21 +473,27 @@ def Mrrr(message):
 
 #===================1 sending msg every day that count our meeting in december 1========================
 
-USER_CHAT_ID = 7843995956  # Change to your user chat ID
-MESSAGE_FILE = "code/text_docs/kind_messages.txt"
-
-MESSAGES_PER_DAY = 3
-START_DATE = datetime(2025, 1, 1, tzinfo=pytz.timezone("Asia/Tokyo"))
+USER_CHAT_ID = 7843995956              # <-- Your personal chat ID to send kind messages
+ADMIN_CHAT_ID = 6921647429             # <-- Admin chat for controlling DB via bot
 
 JST = pytz.timezone("Asia/Tokyo")
+START_DATE = datetime(2025, 1, 1, tzinfo=JST)  # When message rotation starts
+MESSAGES_PER_DAY = 3
 
-# Load messages skipping empty lines
-with open(MESSAGE_FILE, "r", encoding="utf-8") as f:
+KIND_MESSAGES_FILE = "code/text_docs/kind_messages.txt"
+DATABASE_FILE = "Data_Base/File_DataBase.txt"
+
+bot = telebot.TeleBot(API_TOKEN)
+current_index = 0
+closed = False
+
+
+# === Load Messages ===
+with open(KIND_MESSAGES_FILE, "r", encoding="utf-8") as f:
     messages = [line.strip() for line in f if line.strip()]
 
-current_index = 0  # tracks the next message to send globally
 
-
+# === Utility Functions ===
 def get_japan_now():
     return datetime.now(JST)
 
@@ -498,64 +506,63 @@ def wait_until(dt):
         time_module.sleep(wait_seconds)
 
 
+# === Kind Message Sender ===
 def send_messages_for_today():
     global current_index
 
     now = get_japan_now()
-    today_date = now.date()
+    today = now.date()
+    start_local = START_DATE.date()
+    days_passed = (today - start_local).days
 
-    start_date_local = START_DATE.astimezone(JST).date()
-    days_passed = (today_date - start_date_local).days
     if days_passed < 0:
-        days_passed = 0
+        print("Start date not reached yet.")
+        return
 
     day_start_index = days_passed * MESSAGES_PER_DAY
     day_end_index = min(day_start_index + MESSAGES_PER_DAY, len(messages))
 
-    # If current_index is behind today's start, jump to today's messages
     if current_index < day_start_index:
         current_index = day_start_index
 
-    # Define sending window 8:00 AM to 2:00 AM next day JST
-    send_start = datetime.combine(today_date, time(8, 0), tzinfo=JST)
-    send_end = datetime.combine(today_date + timedelta(days=1), time(2, 0), tzinfo=JST)
+    send_start = datetime.combine(today, time(8, 0), tzinfo=JST)
+    send_end = datetime.combine(today + timedelta(days=1), time(2, 0), tzinfo=JST)
 
-    # If before sending window, wait till 8 AM JST
     if now < send_start:
-        print("Before sending window. Waiting until 8:00 AM JST...")
+        print("Before 8:00 AM JST. Waiting...")
         wait_until(send_start)
         now = get_japan_now()
 
-    # If after sending window, skip today and wait until next day 8 AM
     if now >= send_end:
-        print("Past sending window for today. Waiting until next day 8:00 AM JST...")
-        next_day_start = send_start + timedelta(days=1)
-        wait_until(next_day_start)
+        print("Past 2:00 AM JST. Waiting for next day...")
+        next_day = send_start + timedelta(days=1)
+        wait_until(next_day)
         return
 
     messages_left = day_end_index - current_index
     if messages_left <= 0:
-        print("All messages for today sent or no messages today.")
+        print("All today's messages sent.")
         return
 
-    total_seconds_left = (send_end - now).total_seconds()
-
-    # Generate random delays to space messages in remaining time
+    total_seconds = (send_end - now).total_seconds()
     weights = [random.random() for _ in range(messages_left)]
     total_weight = sum(weights)
-    delays = [total_seconds_left * (w / total_weight) for w in weights]
+    delays = [total_seconds * (w / total_weight) for w in weights]
 
-    for delay, msg_index in zip(delays, range(current_index, day_end_index)):
-        msg = messages[msg_index]
-        bot.send_message(USER_CHAT_ID, msg)
-        print(f"Sent message #{msg_index + 1}: {msg}")
+    for delay, idx in zip(delays, range(current_index, day_end_index)):
+        msg = messages[idx]
+        try:
+            bot.send_message(USER_CHAT_ID, msg)
+            print(f"Sent message #{idx + 1}: {msg}")
+        except Exception as e:
+            print(f"Error sending message: {e}")
         current_index += 1
 
-        if delay > 0:
-            print(f"Waiting {delay:.0f} seconds before next message...")
+        if delay > 0 and idx < day_end_index - 1:
+            print(f"Waiting {delay:.0f} seconds before next...")
             time_module.sleep(delay)
 
-    print("Finished today's messages.")
+    print("Finished today's kind messages.")
 
 
 def message_sender_loop():
@@ -563,44 +570,44 @@ def message_sender_loop():
         try:
             send_messages_for_today()
         except Exception as e:
-            print(f"Error in sending messages: {e}")
-        # Wait 5 minutes before next check to avoid CPU spinning
-        time_module.sleep(300)
-#===================0 sending msg every day that count our meeting in december 0========================
+            print(f"[Error in sender loop] {e}")
+        time_module.sleep(300)  # Check again every 5 minutes
 
 
-# === Telegram message handler for saving text messages to database ===
-closed = False
-
-
+# === Message Handling (/open, /close, regular text) ===
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
     global closed
+    text = message.text.strip().lower()
+
+    if message.chat.id != ADMIN_CHAT_ID:
+        return  # Ignore others
+
     try:
-        if message.text.lower() == '/':  # command to close database
-            print(message.text)
+        if text == '/close':
             closed = True
-            bot.send_message(6921647429, "Closed the DataBase /")
-            with open("Data_Base/File_DataBase.txt", "rb") as file1:
-                bot.send_document(6921647429, file1)
-            with open("Data_Base/File_DataBase.txt", "w") as file:
-                file.truncate()
-        elif message.text.lower() == '//':  # command to open database
-            bot.send_message(6921647429, "Opened the DataBase //")
+            bot.send_message(ADMIN_CHAT_ID, "✅ Closed the DataBase")
+            with open(DATABASE_FILE, "rb") as f:
+                bot.send_document(ADMIN_CHAT_ID, f)
+            with open(DATABASE_FILE, "w") as f:
+                f.truncate()
+
+        elif text == '/open':
             closed = False
-        elif message.text.strip() != '' and not closed:
-            print(message.text)
-            with open("Data_Base/File_DataBase.txt", "a", encoding="utf-8") as file:
-                file.write("\n")
-                file.write(message.text)
+            bot.send_message(ADMIN_CHAT_ID, "✅ Opened the DataBase")
+
+        elif not closed and message.text.strip():
+            print(f"Logged: {message.text}")
+            with open(DATABASE_FILE, "a", encoding="utf-8") as f:
+                f.write("\n" + message.text)
+
     except Exception as e:
-        print(f"Error in message handler: {e}")
+        print(f"[Message Handler Error] {e}")
 
 
-# Start sending messages in a separate thread
+# === Start Threads ===
 threading.Thread(target=message_sender_loop, daemon=True).start()
-
-# Start bot polling (this runs forever)
 bot.infinity_polling()
+
 
 
