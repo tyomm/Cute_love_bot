@@ -498,7 +498,6 @@ def send_three_messages_daily():
             send_next_message()
 
             # === 🔁 DELAY SETTINGS ===
-
             TEST_MODE = True  # ✅ Set to False when you're ready for real timing
 
             if TEST_MODE:
