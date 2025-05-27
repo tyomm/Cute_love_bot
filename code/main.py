@@ -12,8 +12,7 @@ import datetime
 from zoneinfo import ZoneInfo
 import time as time_module
 import pytz
-import time as time_module
-from datetime import datetime, timedelta, time
+
 
 bot = telebot.TeleBot(API_KEY, parse_mode=None)
 
