@@ -479,9 +479,10 @@ MESSAGE_FILE = "code/text_docs/kind_messages.txt"
 with open(MESSAGE_FILE, "r", encoding="utf-8") as f:
     messages = [line.strip() for line in f if line.strip()]
 
-current_index = 0  # Index of the next message to send
+current_index = 0  # index of the next message to send
 
-# === SEND A SINGLE MESSAGE ===
+# Your bot instance should be defined somewhere here as `bot`
+
 def send_next_message():
     global current_index
     if current_index < len(messages):
@@ -492,46 +493,119 @@ def send_next_message():
     else:
         print("✅ All messages have been sent!")
 
-# === DAILY MESSAGE LOGIC ===
+def get_japan_now():
+    return datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
+
+def hours_until_next_2am(now):
+    """Calculate hours from 'now' until the next 2:00 AM JST."""
+    today_2am = now.replace(hour=2, minute=0, second=0, microsecond=0)
+    if now < today_2am:
+        # next 2am is today at 2am
+        delta = today_2am - now
+    else:
+        # next 2am is tomorrow
+        tomorrow = now + datetime.timedelta(days=1)
+        tomorrow_2am = tomorrow.replace(hour=2, minute=0, second=0, microsecond=0)
+        delta = tomorrow_2am - now
+    return delta.total_seconds() / 3600
+
+def wait_until_8am():
+    now = get_japan_now()
+    eight_am_today = now.replace(hour=8, minute=0, second=0, microsecond=0)
+    if now >= eight_am_today:
+        # already past 8am, no need to wait
+        return
+    wait_seconds = (eight_am_today - now).total_seconds()
+    print(f"🌙 It's night time now. Waiting {wait_seconds/3600:.2f} hours until 8AM JST...")
+    time.sleep(wait_seconds)
+
 def send_three_messages_daily():
     global current_index
-    TEST_MODE = False  #✅ Set to False when you're ready for real timing
+    TEST_MODE = False  # Set True for testing (short delays)
 
     while current_index < len(messages):
-        total_delay_hours = 0
-        messages_sent = 0
+        now = get_japan_now()
 
-        while messages_sent < 3 and current_index < len(messages):
-            # Check current time in Japan
-            now = datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
-            if 2 <= now.hour < 8:
-                sleep_hours = 8 - now.hour
-                print(f"🌙 It's nighttime in Japan ({now.hour}:00). Sleeping {sleep_hours} hours...")
-                time.sleep(sleep_hours * 3600)
-                continue
+        # If current time is between 2AM and 8AM JST, wait until 8AM before sending anything
+        if 2 <= now.hour < 8:
+            wait_until_8am()
+            now = get_japan_now()
+
+        # Calculate how many hours remain until next forbidden 2AM JST period
+        remaining_hours = hours_until_next_2am(now)
+
+        # We have 3 messages to send in remaining_hours window
+        # If remaining_hours < minimal safe threshold (like 0.5h), wait until 8AM next day
+        if remaining_hours < 0.5:
+            wait_until_8am()
+            continue  # Recalculate now and remaining_hours after wait
+
+        # Randomly split remaining_hours into 3 delays summing up <= remaining_hours
+        if TEST_MODE:
+            # short fixed delays for testing
+            delays = [5, 5, 5]  # 5 seconds between messages
+        else:
+            # Generate 3 random weights
+            weights = [random.random() for _ in range(3)]
+            total_weight = sum(weights)
+            delays = [(w / total_weight) * remaining_hours for w in weights]  # in hours
+
+        total_delay_hours = 0
+
+        for delay_hours in delays:
+            if current_index >= len(messages):
+                break
 
             send_next_message()
-            messages_sent += 1
+
+            # After sending message, wait delay_hours (except after last message)
+            if current_index == len(messages):
+                # last message sent, no delay needed
+                break
 
             if TEST_MODE:
-                delay_seconds = 30
+                delay_seconds = 5
                 total_delay_hours += delay_seconds / 3600
                 print(f"🧪 Test mode: waiting {delay_seconds} seconds before next message...")
                 time.sleep(delay_seconds)
             else:
-                # Divide remaining 18 hours into 3 parts = average 6h between
-                delay_hours = 3 + (random.random() * 6)  # random between 3 to 9 hours
-                total_delay_hours += delay_hours
-                print(f"⏳ Waiting {delay_hours:.2f} hours before next message...")
-                time.sleep(delay_hours * 3600)
+                delay_seconds = delay_hours * 3600
 
+                # If delay would go into forbidden time (2AM-8AM), cut short delay and wait till 8AM
+                now = get_japan_now()
+                next_time = now + datetime.timedelta(seconds=delay_seconds)
+                # If next_time is in forbidden period, adjust
+                if 2 <= next_time.hour < 8:
+                    # Calculate seconds until 8AM
+                    eight_am = next_time.replace(hour=8, minute=0, second=0, microsecond=0)
+                    wait_seconds = (eight_am - now).total_seconds()
+                    print(f"⏳ Waiting {wait_seconds/3600:.2f} hours until 8AM JST (skipping night)...")
+                    time.sleep(wait_seconds)
+                else:
+                    print(f"⏳ Waiting {delay_hours:.2f} hours before next message...")
+                    time.sleep(delay_seconds)
+
+                total_delay_hours += delay_hours
+
+        # After sending 3 messages, wait remaining hours to complete 24h but skip forbidden hours
+        # total "active" hours in day = 18 (8AM to 2AM)
         if not TEST_MODE:
-            # Wait until next day's window opens (24h total, minus time already passed)
-            now = datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
-            tomorrow = (now + datetime.timedelta(days=1)).replace(hour=8, minute=0, second=0, microsecond=0)
-            sleep_seconds = (tomorrow - now).total_seconds()
-            print(f"🌅 Waiting {sleep_seconds/3600:.2f} hours until next day's 8:00 AM JST...")
-            time.sleep(sleep_seconds)
+            now = get_japan_now()
+
+            # Calculate total active hours passed today (from 8AM JST)
+            eight_am_today = now.replace(hour=8, minute=0, second=0, microsecond=0)
+            if now < eight_am_today:
+                # before 8am, so no active hours yet today
+                active_hours_passed = 0
+            else:
+                # active hours is hours from 8am till now (max 18)
+                active_hours_passed = (now - eight_am_today).total_seconds() / 3600
+                active_hours_passed = min(active_hours_passed, 18)
+
+            remaining_active_hours = max(0, 18 - active_hours_passed)
+
+            print(f"🌙 Waiting {remaining_active_hours:.2f} hours of active time until next day's messages...")
+            time.sleep(remaining_active_hours * 3600)
         else:
             print("🧪 Test mode: simulating 'next day' wait with 10 seconds...")
             time.sleep(10)
@@ -569,7 +643,8 @@ def get_text_messages(message):
 #===============0 Save Telegram DataBase 0================
 
 
-# threading.Thread(target=send_three_messages_daily, daemon=True).start()
+threading.Thread(target=send_three_messages_daily, daemon=True).start()
+
 bot.infinity_polling()"
 
 
