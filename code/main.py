@@ -8,6 +8,8 @@ from motivation import Motivation_quete
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 import threading
 import random
+import datetime
+from zoneinfo import ZoneInfo
 
 bot = telebot.TeleBot(API_KEY, parse_mode=None)
 
@@ -466,16 +468,16 @@ def Mrrr(message):
 
 
 #===================1 sending msg every day that count our meeting in december 1========================
+
 USER_CHAT_ID = 7843995956  # Replace with your girlfriend's Telegram user ID
 
-# === FILE SETUP ===
 MESSAGE_FILE = "code/text_docs/kind_messages.txt"
 
-# Load all messages from the file
+# Load all messages from the file, skipping empty lines
 with open(MESSAGE_FILE, "r", encoding="utf-8") as f:
     messages = [line.strip() for line in f if line.strip()]
 
-current_index = 0  # index of the next message to send
+current_index = 0  # Index of the next message to send
 
 # === SEND A SINGLE MESSAGE ===
 def send_next_message():
@@ -486,39 +488,48 @@ def send_next_message():
         print(f"Sent message #{current_index + 1}: {msg}")
         current_index += 1
     else:
-        print("All messages have been sent!")
+        print("✅ All messages have been sent!")
 
 # === DAILY MESSAGE LOGIC ===
 def send_three_messages_daily():
     global current_index
+    TEST_MODE = True  #✅ Set to False when you're ready for real timing
 
     while current_index < len(messages):
         total_delay_hours = 0
+        messages_sent = 0
 
-        for _ in range(3):  # send 3 messages per day
-            if current_index >= len(messages):
-                break
+        while messages_sent < 3 and current_index < len(messages):
+            # Check current time in Japan
+            now = datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
+            if 2 <= now.hour < 8:
+                sleep_hours = 8 - now.hour
+                print(f"🌙 It's nighttime in Japan ({now.hour}:00). Sleeping {sleep_hours} hours...")
+                time.sleep(sleep_hours * 3600)
+                continue
 
             send_next_message()
-
-            TEST_MODE = False  #✅ Set to False when you're ready for real timing
+            messages_sent += 1
 
             if TEST_MODE:
-                delay_seconds = 30
+                delay_seconds = 5
                 total_delay_hours += delay_seconds / 3600
                 print(f"🧪 Test mode: waiting {delay_seconds} seconds before next message...")
                 time.sleep(delay_seconds)
             else:
-                delay_hours = 4 + (4 * random.random())  # 4 to 8 hours
+                # Divide remaining 18 hours into 3 parts = average 6h between
+                delay_hours = 3 + (random.random() * 6)  # random between 3 to 9 hours
                 total_delay_hours += delay_hours
                 print(f"⏳ Waiting {delay_hours:.2f} hours before next message...")
                 time.sleep(delay_hours * 3600)
 
-        # After sending 3 messages, wait remaining hours to complete 24h
         if not TEST_MODE:
-            remaining_hours = max(0, 24 - total_delay_hours)
-            print(f"🌙 Waiting {remaining_hours:.2f} hours until next day's messages...")
-            time.sleep(remaining_hours * 3600)
+            # Wait until next day's window opens (24h total, minus time already passed)
+            now = datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
+            tomorrow = (now + datetime.timedelta(days=1)).replace(hour=8, minute=0, second=0, microsecond=0)
+            sleep_seconds = (tomorrow - now).total_seconds()
+            print(f"🌅 Waiting {sleep_seconds/3600:.2f} hours until next day's 8:00 AM JST...")
+            time.sleep(sleep_seconds)
         else:
             print("🧪 Test mode: simulating 'next day' wait with 10 seconds...")
             time.sleep(10)
