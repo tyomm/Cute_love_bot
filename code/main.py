@@ -471,104 +471,104 @@ def Mrrr(message):
   bot.send_photo(message.chat.id, img)
 #==============0 saying 'mrrr' 0===================
 
-#===================1 sending msg every day that count our meeting in december 1========================
-USER_CHAT_ID = 7843995956  # Replace with your girlfriend's Telegram user ID
-MESSAGE_FILE = "code/text_docs/kind_messages.txt"
+# #===================1 sending msg every day that count our meeting in december 1========================
+# USER_CHAT_ID = 7843995956  # Replace with your girlfriend's Telegram user ID
+# MESSAGE_FILE = "code/text_docs/kind_messages.txt"
 
-with open(MESSAGE_FILE, "r", encoding="utf-8") as f:
-    messages = [line.strip() for line in f if line.strip()]
+# with open(MESSAGE_FILE, "r", encoding="utf-8") as f:
+#     messages = [line.strip() for line in f if line.strip()]
 
-current_index = 0
+# current_index = 0
 
-def send_next_message():
-    global current_index
-    if current_index < len(messages):
-        msg = messages[current_index]
-        bot.send_message(USER_CHAT_ID, msg)
-        print(f"Sent message #{current_index + 1}: {msg}")
-        current_index += 1
-    else:
-        print("✅ All messages have been sent!")
+# def send_next_message():
+#     global current_index
+#     if current_index < len(messages):
+#         msg = messages[current_index]
+#         bot.send_message(USER_CHAT_ID, msg)
+#         print(f"Sent message #{current_index + 1}: {msg}")
+#         current_index += 1
+#     else:
+#         print("✅ All messages have been sent!")
 
-def get_japan_now():
-    return datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
+# def get_japan_now():
+#     return datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
 
-def get_next_2am(now):
-    """Get the next 2AM JST datetime from now"""
-    candidate = now.replace(hour=2, minute=0, second=0, microsecond=0)
-    if now >= candidate:
-        candidate += datetime.timedelta(days=1)
-    return candidate
+# def get_next_2am(now):
+#     """Get the next 2AM JST datetime from now"""
+#     candidate = now.replace(hour=2, minute=0, second=0, microsecond=0)
+#     if now >= candidate:
+#         candidate += datetime.timedelta(days=1)
+#     return candidate
 
-def wait_until_8am():
-    now = get_japan_now()
-    eight_am = now.replace(hour=8, minute=0, second=0, microsecond=0)
-    if now >= eight_am:
-        return
-    wait_sec = (eight_am - now).total_seconds()
-    print(f"🌙 Waiting {wait_sec/3600:.2f} hours until 8AM JST...")
-    time.sleep(wait_sec)
+# def wait_until_8am():
+#     now = get_japan_now()
+#     eight_am = now.replace(hour=8, minute=0, second=0, microsecond=0)
+#     if now >= eight_am:
+#         return
+#     wait_sec = (eight_am - now).total_seconds()
+#     print(f"🌙 Waiting {wait_sec/3600:.2f} hours until 8AM JST...")
+#     time.sleep(wait_sec)
 
-def send_three_messages_daily():
-    global current_index
-    TEST_MODE = False
+# def send_three_messages_daily():
+#     global current_index
+#     TEST_MODE = False
 
-    while current_index < len(messages):
-        now = get_japan_now()
-        # If between 2AM and 8AM JST, wait till 8AM
-        if 2 <= now.hour < 8:
-            wait_until_8am()
-            now = get_japan_now()
+#     while current_index < len(messages):
+#         now = get_japan_now()
+#         # If between 2AM and 8AM JST, wait till 8AM
+#         if 2 <= now.hour < 8:
+#             wait_until_8am()
+#             now = get_japan_now()
 
-        next_2am = get_next_2am(now)
-        remaining_seconds = (next_2am - now).total_seconds()
+#         next_2am = get_next_2am(now)
+#         remaining_seconds = (next_2am - now).total_seconds()
         
-        if remaining_seconds < 30:  # less than 30 seconds to 2AM, wait till 8AM next day
-            wait_until_8am()
-            continue
+#         if remaining_seconds < 30:  # less than 30 seconds to 2AM, wait till 8AM next day
+#             wait_until_8am()
+#             continue
 
-        # We must send exactly 3 messages within remaining_seconds (<= 18 hours * 3600)
-        # Split remaining_seconds randomly into 3 intervals (delays between messages)
-        if TEST_MODE:
-            delays = [5, 5, 5]  # 5 seconds for testing
-        else:
-            # Generate 3 random weights
-            weights = [random.random() for _ in range(3)]
-            total_weight = sum(weights)
-            # Multiply by remaining_seconds, but subtract some seconds to avoid going past 2AM
-            total_window = remaining_seconds * 0.9  # keep 10% buffer to avoid edge cases
-            delays = [(w / total_weight) * total_window for w in weights]
+#         # We must send exactly 3 messages within remaining_seconds (<= 18 hours * 3600)
+#         # Split remaining_seconds randomly into 3 intervals (delays between messages)
+#         if TEST_MODE:
+#             delays = [5, 5, 5]  # 5 seconds for testing
+#         else:
+#             # Generate 3 random weights
+#             weights = [random.random() for _ in range(3)]
+#             total_weight = sum(weights)
+#             # Multiply by remaining_seconds, but subtract some seconds to avoid going past 2AM
+#             total_window = remaining_seconds * 0.9  # keep 10% buffer to avoid edge cases
+#             delays = [(w / total_weight) * total_window for w in weights]
 
-        for delay in delays:
-            if current_index >= len(messages):
-                break
+#         for delay in delays:
+#             if current_index >= len(messages):
+#                 break
 
-            send_next_message()
+#             send_next_message()
 
-            # Wait delay before sending next message, except after last message
-            if current_index == len(messages):
-                break
+#             # Wait delay before sending next message, except after last message
+#             if current_index == len(messages):
+#                 break
 
-            if TEST_MODE:
-                print(f"🧪 Test mode: waiting 5 seconds before next message...")
-                time.sleep(5)
-            else:
-                now = get_japan_now()
-                # If waiting delay goes into forbidden hours (2AM - 8AM), cut wait and wait till 8AM
-                potential_next_time = now + datetime.timedelta(seconds=delay)
-                if 2 <= potential_next_time.hour < 8:
-                    wait_until_8am()
-                else:
-                    print(f"⏳ Waiting {delay/3600:.2f} hours before next message...")
-                    time.sleep(delay)
+#             if TEST_MODE:
+#                 print(f"🧪 Test mode: waiting 5 seconds before next message...")
+#                 time.sleep(5)
+#             else:
+#                 now = get_japan_now()
+#                 # If waiting delay goes into forbidden hours (2AM - 8AM), cut wait and wait till 8AM
+#                 potential_next_time = now + datetime.timedelta(seconds=delay)
+#                 if 2 <= potential_next_time.hour < 8:
+#                     wait_until_8am()
+#                 else:
+#                     print(f"⏳ Waiting {delay/3600:.2f} hours before next message...")
+#                     time.sleep(delay)
 
-        # After sending today's 3 messages, wait until 8AM next day before next batch
-        now = get_japan_now()
-        next_day_8am = (now + datetime.timedelta(days=1)).replace(hour=8, minute=0, second=0, microsecond=0)
-        wait_seconds = (next_day_8am - now).total_seconds()
-        print(f"🌙 All 3 messages sent for today. Waiting {wait_seconds/3600:.2f} hours until 8AM JST next day...")
-        time.sleep(wait_seconds)
-#===================0 sending msg every day that count our meeting in december 0========================
+#         # After sending today's 3 messages, wait until 8AM next day before next batch
+#         now = get_japan_now()
+#         next_day_8am = (now + datetime.timedelta(days=1)).replace(hour=8, minute=0, second=0, microsecond=0)
+#         wait_seconds = (next_day_8am - now).total_seconds()
+#         print(f"🌙 All 3 messages sent for today. Waiting {wait_seconds/3600:.2f} hours until 8AM JST next day...")
+#         time.sleep(wait_seconds)
+##===================0 sending msg every day that count our meeting in december 0========================
 
 
 #==============1 Save Telegram DataBase 1================
@@ -600,7 +600,7 @@ def get_text_messages(message):
       file.write("\n")
       file.write(message.text)
 #===============0 Save Telegram DataBase 0================
-threading.Thread(target=send_three_messages_daily, daemon=True).start()
+# threading.Thread(target=send_three_messages_daily, daemon=True).start()
 
 bot.infinity_polling()"
 
