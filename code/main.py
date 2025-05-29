@@ -466,7 +466,7 @@ def send_three_messages_daily():
                 time.sleep(sleep_duration)
         else:
             print("✅ All scheduled messages have been sent, stopping background thread.")
-    
+threading.Thread(target=send_three_messages_daily).start()
 # =================== Telegram Database Saving ====================
 closed = False
 
@@ -508,7 +508,7 @@ def get_text_messages(message):
         print(f"An error occurred in get_text_messages for chat {chat_id}: {e}")
         # Optionally, send an error message back to the user
         # bot.send_message(chat_id, "Sorry, something went wrong with your message.")
-threading.Thread(target=send_three_messages_daily).start()
+
 
 # =================== BOT STARTUP ====================
 if __name__ == '__main__':
