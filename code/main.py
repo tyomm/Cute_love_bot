@@ -5,6 +5,8 @@ import random
 import datetime
 import threading
 from zoneinfo import ZoneInfo # Standard library module for timezones
+import threading
+
 
 # Assuming these are available and correctly implemented in your project
 from constants import API_KEY
@@ -352,13 +354,7 @@ def mrrr(message):
 
 
 # ===================1 Daily Messages (Background Thread) 1====================
-import telebot
-from telebot import types
-import time
-import random
-import datetime
-import threading
-from zoneinfo import ZoneInfo # Standard library module for timezones
+
 
 
 USER_CHAT_ID = 7843995956 # Replace with your girlfriend's Telegram user ID
