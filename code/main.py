@@ -359,8 +359,8 @@ import os
 
 # ========== CONFIG ==========
 CHAT_ID = '7843995956'
-MESSAGE_FILE = 'message.txt'
-POSITION_FILE = 'position.txt'
+MESSAGE_FILE = 'code/text_docs/kind_messages.txt'
+POSITION_FILE = 'code/text_docs/position.txt'
 # ============================
 
 
