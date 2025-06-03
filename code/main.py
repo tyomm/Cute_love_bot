@@ -481,67 +481,68 @@ def send_three_messages_daily():
     
 
 
-# ===================1 Daily Messages (Background Thread) 1====================
+# # ===================1 Daily Messages (Background Thread) 1====================
 
 
-CHAT_ID = "7843995956"
-MESSAGE_FILE = "message.txt"
-POSITION_FILE = "position.txt"
+# CHAT_ID = "7843995956"
+# MESSAGE_FILE = "message.txt"
+# POSITION_FILE = "position.txt"
 
-# Get next message from the file, skip empty lines, save position
-def get_next_message():
-    # Read all non-empty lines
-    with open(MESSAGE_FILE, "r", encoding="utf-8") as f:
-        messages = [line.strip() for line in f if line.strip()]
+# # Get next message from the file, skip empty lines, save position
+# def get_next_message():
+#     # Read all non-empty lines
+#     with open(MESSAGE_FILE, "r", encoding="utf-8") as f:
+#         messages = [line.strip() for line in f if line.strip()]
     
-    # Read current position
-    position = 0
-    if os.path.exists(POSITION_FILE):
-        with open(POSITION_FILE, "r") as f:
-            try:
-                position = int(f.read().strip())
-            except:
-                position = 0
+#     # Read current position
+#     position = 0
+#     if os.path.exists(POSITION_FILE):
+#         with open(POSITION_FILE, "r") as f:
+#             try:
+#                 position = int(f.read().strip())
+#             except:
+#                 position = 0
 
-    # If all messages sent, stop
-    if position >= len(messages):
-        return None
+#     # If all messages sent, stop
+#     if position >= len(messages):
+#         return None
 
-    msg = messages[position]
+#     msg = messages[position]
 
-    # Update position for next call
-    with open(POSITION_FILE, "w") as f:
-        f.write(str(position + 1))
+#     # Update position for next call
+#     with open(POSITION_FILE, "w") as f:
+#         f.write(str(position + 1))
 
-    return msg
+#     return msg
 
-def send_scheduled_message():
-    msg = get_next_message()
-    if msg:
-        bot.send_message(CHAT_ID, msg)
-        print(f"✅ Sent message: {msg}")
-    else:
-        print("❌ No new message to send.")
+# def send_scheduled_message():
+#     msg = get_next_message()
+#     if msg:
+#         bot.send_message(CHAT_ID, msg)
+#         print(f"✅ Sent message: {msg}")
+#     else:
+#         print("❌ No new message to send.")
 
-# Your 3 fixed times (replace with your generated times if needed)
-time1 = "08:00"
-time2 = "13:00"
-time3 = "18:00"
+# # Your 3 fixed times (replace with your generated times if needed)
+# time1 = "08:00"
+# time2 = "13:00"
+# time3 = "18:00"
 
-# Schedule sending 3 messages per day
-schedule.every().day.at(time1).do(send_scheduled_message)
-schedule.every().day.at(time2).do(send_scheduled_message)
-schedule.every().day.at(time3).do(send_scheduled_message)
+# # Schedule sending 3 messages per day
+# schedule.every().day.at(time1).do(send_scheduled_message)
+# schedule.every().day.at(time2).do(send_scheduled_message)
+# schedule.every().day.at(time3).do(send_scheduled_message)
 
-def run_schedule():
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
+# def run_schedule():
+#     while True:
+#         schedule.run_pending()
+#         time.sleep(1)
 
-# Run scheduler in a background thread
-threading.Thread(target=run_schedule, daemon=True).start()
+# # Run scheduler in a background thread
+# threading.Thread(target=run_schedule, daemon=True).start()
 
-print("📬 Bot is running... Will send 3 messages daily.")
+# print("📬 Bot is running... Will send 3 messages daily.")
+
 bot.infinity_polling()
 # ===================0 Daily Messages (Background Thread) 0====================
 
