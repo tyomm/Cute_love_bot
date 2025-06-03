@@ -369,13 +369,13 @@ closed = False  # For controlling message saving
 
 
 # ========== Generate Random Times ==========
-def generate_three_times():
-    while True:
-        times = sorted(random.sample(ALLOWED_HOURS, 3))
-        if (times[1] - times[0] >= MIN_GAP) and (times[2] - times[1] >= MIN_GAP):
-            return [f"{h:02}:00" for h in times]
+# def generate_three_times():
+#     while True:
+#         times = sorted(random.sample(ALLOWED_HOURS, 3))
+#         if (times[1] - times[0] >= MIN_GAP) and (times[2] - times[1] >= MIN_GAP):
+#             return [f"{h:02}:00" for h in times]
 
-time1, time2, time3 = generate_three_times()
+# time1, time2, time3 = generate_three_times()
 # ===========================================
 
 
@@ -425,43 +425,6 @@ time1, time2, time3 = generate_three_times()
 # threading.Thread(target=run_schedule, daemon=True).start()
 # # ===========================================
 
-
-# ========== Telegram Database Saving ==========
-@bot.message_handler(content_types=['text'])
-def get_text_messages(message):
-    global closed
-    chat_id = message.chat.id
-    user_text = message.text.lower()
-
-    try:
-        if user_text == '/':  # finish
-            print(f"User {chat_id} sent '/'. Closing database.")
-            closed = True
-            bot.send_message(6921647429, "Closed the DataBase /")
-            try:
-                with open("Data_Base/File_DataBase.txt", "rb") as file1:
-                    bot.send_document(6921647429, file1)
-                with open("Data_Base/File_DataBase.txt", "w", encoding="utf-8") as file:
-                    file.truncate()
-            except FileNotFoundError:
-                bot.send_message(6921647429, "Data_Base/File_DataBase.txt not found.")
-            except Exception as e:
-                bot.send_message(6921647429, f"Error processing database file: {e}")
-
-        elif user_text == '//':  # continue
-            print(f"User {chat_id} sent '//'. Opening database.")
-            bot.send_message(6921647429, "Opened the DataBase //")
-            closed = False
-
-        elif not closed and not user_text.startswith('/'):
-            print(f"Saving text from {chat_id}: {message.text}")
-            with open("Data_Base/File_DataBase.txt", "a", encoding="utf-8") as file:
-                file.write("\n")
-                file.write(message.text)
-
-    except Exception as e:
-        print(f"An error occurred in get_text_messages for chat {chat_id}: {e}")
-# ===========================================
 
 
 # ========== Start the bot ==========
