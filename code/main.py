@@ -375,14 +375,11 @@ def generate_three_times():
 time1, time2, time3 = generate_three_times()
 #===========0 Generating random o'clock to send message in that time 0==============================
 
-
 # ========== CONFIG ==========
 CHAT_ID = '7843995956'
 MESSAGE_FILE = 'message.txt'
 POSITION_FILE = 'position.txt'
 # ============================
-
-
 def get_next_message():
     # Load all messages from message.txt
     with open(MESSAGE_FILE, 'r', encoding='utf-8') as f:
