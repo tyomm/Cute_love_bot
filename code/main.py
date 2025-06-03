@@ -400,8 +400,5 @@ def get_text_messages(message):
 
 
 # =================== BOT STARTUP ====================
-if __name__ == '__main__':
-    t = threading.Thread(target=send_three_messages_daily)
-    t.start()
-    bot.infinity_polling()
+bot.infinity_polling()
     
