@@ -358,13 +358,12 @@ def mrrr(message):
 # ========== INIT TELEGRAM BOT ==========
 # bot = telebot.TeleBot("YOUR_BOT_TOKEN_HERE")  # Replace with your actual bot token
 
-# ========== CONFIG ==========
-CHAT_ID = '7843995956'  # Your Telegram user ID
-MESSAGE_FILE = 'message.txt'
-POSITION_FILE = 'position.txt'
-ALLOWED_HOURS = list(range(3, 20))  # From 3:00 to 19:00 (not between 8 PM – 3 AM)
-MIN_GAP = 4  # At least 4 hours between each send time
-closed = False  # For controlling message saving
+# # ========== CONFIG ==========
+# CHAT_ID = '7843995956'  # Your Telegram user ID
+# MESSAGE_FILE = 'message.txt'
+# POSITION_FILE = 'position.txt'
+# ALLOWED_HOURS = list(range(3, 20))  # From 3:00 to 19:00 (not between 8 PM – 3 AM)
+# MIN_GAP = 4  # At least 4 hours between each send time
 # =======================================
 
 
