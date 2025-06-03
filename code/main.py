@@ -6,6 +6,12 @@ import datetime
 import threading
 from zoneinfo import ZoneInfo # Standard library module for timezones
 import threading
+import schedule
+import time
+from telebot import TeleBot
+import os
+
+bot = TeleBot(API_KEY)
 
 
 # Assuming these are available and correctly implemented in your project
@@ -476,13 +482,7 @@ def send_three_messages_daily():
 
 
 # ===================1 Daily Messages (Background Thread) 1====================
-import threading
-import schedule
-import time
-from telebot import TeleBot
-import os
 
-bot = TeleBot("YOUR_TOKEN")
 
 CHAT_ID = "7843995956"
 MESSAGE_FILE = "message.txt"
