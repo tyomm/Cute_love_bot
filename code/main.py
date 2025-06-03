@@ -478,78 +478,9 @@ def send_three_messages_daily():
 
     
 
-# ===================0 Daily Messages (Background Thread) 0====================
+
 # ===================1 Daily Messages (Background Thread) 1====================
-import threading
-import schedule
-import time
-import os
-import random
 
-# ========== CONFIG ==========
-CHAT_ID = '7843995956'
-MESSAGE_FILE = 'message.txt'
-POSITION_FILE = 'position.txt'
-ALLOWED_HOURS = list(range(3, 20))  # From 3:00 to 19:00 (before 8 PM)
-MIN_GAP = 4  # At least 4 hours between each message
-# ============================
-
-def generate_three_times():
-    while True:
-        times = sorted(random.sample(ALLOWED_HOURS, 3))
-        if (times[1] - times[0] >= MIN_GAP) and (times[2] - times[1] >= MIN_GAP):
-            return [f"{h:02}:00" for h in times]
-
-# Generate and unpack into variables
-time1, time2, time3 = generate_three_times()
-
-def get_next_message():
-    # Load all messages from message.txt
-    with open(MESSAGE_FILE, 'r', encoding='utf-8') as f:
-        messages = [line.strip() for line in f if line.strip()]
-
-    # Load current position
-    position = 0
-    if os.path.exists(POSITION_FILE):
-        with open(POSITION_FILE, 'r') as f:
-            try:
-                position = int(f.read().strip())
-            except ValueError:
-                position = 0
-
-    # If we're out of messages, return None
-    if position >= len(messages):
-        return None
-
-    # Get the next message and update position
-    next_message = messages[position]
-    with open(POSITION_FILE, 'w') as f:
-        f.write(str(position + 1))
-
-    return next_message
-
-def send_scheduled_message():
-    msg = get_next_message()
-    if msg:
-        bot.send_message(CHAT_ID, msg)
-        print(f"✅ Sent: {msg}")
-    else:
-        print("❌ No new message to send.")
-
-# Schedule 3 messages per day
-schedule.every().day.at(time1).do(send_scheduled_message)
-schedule.every().day.at(time2).do(send_scheduled_message)
-schedule.every().day.at(time3).do(send_scheduled_message)
-
-print(f"📬 Bot is running... Will send 3 messages daily at {time1}, {time2}, and {time3}.")
-
-# Run scheduler in background thread
-def run_schedule():
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
-
-threading.Thread(target=run_schedule, daemon=True).start()
 # ===================0 Daily Messages (Background Thread) 0====================
 
     
