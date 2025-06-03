@@ -1,14 +1,10 @@
 import telebot
 from telebot import types
-import time
-import random
-import datetime
 import threading
-from zoneinfo import ZoneInfo # Standard library module for timezones
 import schedule
+import time
 import os
-
-# Assuming these are available and correctly implemented in your project
+import random
 from constants import API_KEY
 from film import search_film
 from compliment import get_random_compliment_from_file
@@ -358,34 +354,38 @@ def mrrr(message):
         bot.send_message(message.chat.id, "Sorry, I couldn't send the cat image right now.")
 
 
-# ===================1 Daily Messages (Background Thread) 1====================
+
+# ========== INIT TELEGRAM BOT ==========
+# bot = telebot.TeleBot("YOUR_BOT_TOKEN_HERE")  # Replace with your actual bot token
+
+# ========== CONFIG ==========
+CHAT_ID = '7843995956'  # Your Telegram user ID
+MESSAGE_FILE = 'message.txt'
+POSITION_FILE = 'position.txt'
+ALLOWED_HOURS = list(range(3, 20))  # From 3:00 to 19:00 (not between 8 PM – 3 AM)
+MIN_GAP = 4  # At least 4 hours between each send time
+closed = False  # For controlling message saving
+# =======================================
 
 
-#===========1 Generating random o'clock to send message in that time 1==============================
-ALLOWED_HOURS = list(range(3, 20)) # Allowed hours: from 3:00 to 19:00 (before 8 PM)
-MIN_GAP = 4  # Minimum 4-hour difference
-
+# ========== Generate Random Times ==========
 def generate_three_times():
     while True:
         times = sorted(random.sample(ALLOWED_HOURS, 3))
         if (times[1] - times[0] >= MIN_GAP) and (times[2] - times[1] >= MIN_GAP):
             return [f"{h:02}:00" for h in times]
 
-# Generate and unpack into variables
 time1, time2, time3 = generate_three_times()
-#===========0 Generating random o'clock to send message in that time 0==============================
+# ===========================================
 
-# ========== CONFIG ==========
-CHAT_ID = '7843995956'
-MESSAGE_FILE = 'message.txt'
-POSITION_FILE = 'position.txt'
-# ============================
+
+# ========== Scheduled Messaging ==========
 def get_next_message():
-    # Load all messages from message.txt
+    # Read all messages
     with open(MESSAGE_FILE, 'r', encoding='utf-8') as f:
         messages = [line.strip() for line in f if line.strip()]
 
-    # Load current position
+    # Read current position
     position = 0
     if os.path.exists(POSITION_FILE):
         with open(POSITION_FILE, 'r') as f:
@@ -394,11 +394,9 @@ def get_next_message():
             except ValueError:
                 position = 0
 
-    # If we're out of messages, return None
     if position >= len(messages):
         return None
 
-    # Get the next message and update position
     next_message = messages[position]
     with open(POSITION_FILE, 'w') as f:
         f.write(str(position + 1))
@@ -413,22 +411,22 @@ def send_scheduled_message():
     else:
         print("❌ No new message to send.")
 
-# Schedule 3 messages per day
 schedule.every().day.at(time1).do(send_scheduled_message)
 schedule.every().day.at(time2).do(send_scheduled_message)
 schedule.every().day.at(time3).do(send_scheduled_message)
 
-print("📬 Bot is running... Will send 3 messages daily.")
+print(f"📬 Bot is running... Will send 3 messages daily at {time1}, {time2}, and {time3}.")
 
-while True:
-    schedule.run_pending()
-    time.sleep(1)
-# ===================0 Daily Messages (Background Thread) 0====================
+def run_schedule():
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
 
-    
-# =================== Telegram Database Saving ====================
-closed = False
+threading.Thread(target=run_schedule, daemon=True).start()
+# ===========================================
 
+
+# ========== Telegram Database Saving ==========
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
     global closed
@@ -436,15 +434,13 @@ def get_text_messages(message):
     user_text = message.text.lower()
 
     try:
-        if user_text == '/':  # '/finish'
+        if user_text == '/':  # finish
             print(f"User {chat_id} sent '/'. Closing database.")
             closed = True
             bot.send_message(6921647429, "Closed the DataBase /")
-            # Ensure the file exists before trying to open
             try:
                 with open("Data_Base/File_DataBase.txt", "rb") as file1:
                     bot.send_document(6921647429, file1)
-                # Clear content after sending
                 with open("Data_Base/File_DataBase.txt", "w", encoding="utf-8") as file:
                     file.truncate()
             except FileNotFoundError:
@@ -452,23 +448,22 @@ def get_text_messages(message):
             except Exception as e:
                 bot.send_message(6921647429, f"Error processing database file: {e}")
 
-        elif user_text == '//':  # '/continue'
+        elif user_text == '//':  # continue
             print(f"User {chat_id} sent '//'. Opening database.")
             bot.send_message(6921647429, "Opened the DataBase //")
             closed = False
-            
-        # Only write to file if not a command and database is not closed
-        elif not closed and not user_text.startswith('/'): # Ensure it's not another command
+
+        elif not closed and not user_text.startswith('/'):
             print(f"Saving text from {chat_id}: {message.text}")
             with open("Data_Base/File_DataBase.txt", "a", encoding="utf-8") as file:
                 file.write("\n")
                 file.write(message.text)
+
     except Exception as e:
         print(f"An error occurred in get_text_messages for chat {chat_id}: {e}")
-        # Optionally, send an error message back to the user
-        # bot.send_message(chat_id, "Sorry, something went wrong with your message.")
+# ===========================================
 
 
-# =================== BOT STARTUP ====================
+# ========== Start the bot ==========
 bot.infinity_polling()
-    
+# ===================================
