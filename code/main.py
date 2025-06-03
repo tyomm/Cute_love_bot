@@ -5,12 +5,19 @@ import random
 import datetime
 import threading
 from zoneinfo import ZoneInfo # Standard library module for timezones
+import schedule
+import os
 
 # Assuming these are available and correctly implemented in your project
 from constants import API_KEY
 from film import search_film
 from compliment import get_random_compliment_from_file
 from motivation import Motivation_quete
+
+
+
+
+
 
 bot = telebot.TeleBot(API_KEY, parse_mode=None)
 
@@ -352,15 +359,27 @@ def mrrr(message):
 
 
 # ===================1 Daily Messages (Background Thread) 1====================
-import telebot
-import schedule
-import time
-import os
+
+
+#===========1 Generating random o'clock to send message in that time 1==============================
+ALLOWED_HOURS = list(range(3, 20)) # Allowed hours: from 3:00 to 19:00 (before 8 PM)
+MIN_GAP = 4  # Minimum 4-hour difference
+
+def generate_three_times():
+    while True:
+        times = sorted(random.sample(ALLOWED_HOURS, 3))
+        if (times[1] - times[0] >= MIN_GAP) and (times[2] - times[1] >= MIN_GAP):
+            return [f"{h:02}:00" for h in times]
+
+# Generate and unpack into variables
+time1, time2, time3 = generate_three_times()
+#===========0 Generating random o'clock to send message in that time 0==============================
+
 
 # ========== CONFIG ==========
 CHAT_ID = '7843995956'
-MESSAGE_FILE = 'code/text_docs/kind_messages.txt'
-POSITION_FILE = 'code/text_docs/position.txt'
+MESSAGE_FILE = 'message.txt'
+POSITION_FILE = 'position.txt'
 # ============================
 
 
@@ -398,9 +417,9 @@ def send_scheduled_message():
         print("❌ No new message to send.")
 
 # Schedule 3 messages per day
-schedule.every().day.at("10:00").do(send_scheduled_message)
-schedule.every().day.at("15:00").do(send_scheduled_message)
-schedule.every().day.at("20:00").do(send_scheduled_message)
+schedule.every().day.at(time1).do(send_scheduled_message)
+schedule.every().day.at(time2).do(send_scheduled_message)
+schedule.every().day.at(time3).do(send_scheduled_message)
 
 print("📬 Bot is running... Will send 3 messages daily.")
 
