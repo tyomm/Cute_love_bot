@@ -352,7 +352,61 @@ def mrrr(message):
 
 
 # ===================1 Daily Messages (Background Thread) 1====================
+import telebot
+import schedule
+import time
+import os
 
+# ========== CONFIG ==========
+CHAT_ID = '7843995956'
+MESSAGE_FILE = 'message.txt'
+POSITION_FILE = 'position.txt'
+# ============================
+
+
+def get_next_message():
+    # Load all messages from message.txt
+    with open(MESSAGE_FILE, 'r', encoding='utf-8') as f:
+        messages = [line.strip() for line in f if line.strip()]
+
+    # Load current position
+    position = 0
+    if os.path.exists(POSITION_FILE):
+        with open(POSITION_FILE, 'r') as f:
+            try:
+                position = int(f.read().strip())
+            except ValueError:
+                position = 0
+
+    # If we're out of messages, return None
+    if position >= len(messages):
+        return None
+
+    # Get the next message and update position
+    next_message = messages[position]
+    with open(POSITION_FILE, 'w') as f:
+        f.write(str(position + 1))
+
+    return next_message
+
+def send_scheduled_message():
+    msg = get_next_message()
+    if msg:
+        bot.send_message(CHAT_ID, msg)
+        print(f"✅ Sent: {msg}")
+    else:
+        print("❌ No new message to send.")
+
+# Schedule 3 messages per day
+schedule.every().day.at("10:00").do(send_scheduled_message)
+schedule.every().day.at("15:00").do(send_scheduled_message)
+schedule.every().day.at("20:00").do(send_scheduled_message)
+
+print("📬 Bot is running... Will send 3 messages daily.")
+
+while True:
+    schedule.run_pending()
+    time.sleep(1)
 # ===================0 Daily Messages (Background Thread) 0====================
 
     
