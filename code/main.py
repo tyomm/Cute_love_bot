@@ -11,7 +11,6 @@ import time
 from telebot import TeleBot
 import os
 
-bot = TeleBot(API_KEY)
 
 
 # Assuming these are available and correctly implemented in your project
