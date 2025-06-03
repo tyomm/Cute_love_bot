@@ -363,119 +363,119 @@ def mrrr(message):
 
 
 
-USER_CHAT_ID = 7843995956 # Replace with your girlfriend's Telegram user ID
-MESSAGE_FILE = "code/text_docs/kind_messages.txt"
+# USER_CHAT_ID = 7843995956 # Replace with your girlfriend's Telegram user ID
+# MESSAGE_FILE = "code/text_docs/kind_messages.txt"
 
-# Load all messages from the file, skipping empty lines
-with open(MESSAGE_FILE, "r", encoding="utf-8") as f:
-    messages = [line.strip() for line in f if line.strip()]
+# # Load all messages from the file, skipping empty lines
+# with open(MESSAGE_FILE, "r", encoding="utf-8") as f:
+#     messages = [line.strip() for line in f if line.strip()]
 
-current_message_index = 0 # Unique name for index variable
+# current_message_index = 0 # Unique name for index variable
 
-def send_next_message_scheduled():
-    global current_message_index
-    if current_message_index < len(messages):
-        msg = messages[current_message_index]
-        bot.send_message(USER_CHAT_ID, msg)
-        print(f"Sent message #{current_message_index + 1}: {msg}")
-        current_message_index += 1
-    else:
-        print("✅ All scheduled messages have been sent!")
+# def send_next_message_scheduled():
+#     global current_message_index
+#     if current_message_index < len(messages):
+#         msg = messages[current_message_index]
+#         bot.send_message(USER_CHAT_ID, msg)
+#         print(f"Sent message #{current_message_index + 1}: {msg}")
+#         current_message_index += 1
+#     else:
+#         print("✅ All scheduled messages have been sent!")
 
-def get_japan_now():
-    return datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
+# def get_japan_now():
+#     return datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
 
-def hours_until_next_time(target_hour, now):
-    """Calculate hours from 'now' until the next occurrence of target_hour JST."""
-    target_today = now.replace(hour=target_hour, minute=0, second=0, microsecond=0)
-    if now < target_today:
-        delta = target_today - now
-    else:
-        tomorrow = now + datetime.timedelta(days=1)
-        target_tomorrow = tomorrow.replace(hour=target_hour, minute=0, second=0, microsecond=0)
-        delta = target_tomorrow - now
-    return delta.total_seconds() / 3600
+# def hours_until_next_time(target_hour, now):
+#     """Calculate hours from 'now' until the next occurrence of target_hour JST."""
+#     target_today = now.replace(hour=target_hour, minute=0, second=0, microsecond=0)
+#     if now < target_today:
+#         delta = target_today - now
+#     else:
+#         tomorrow = now + datetime.timedelta(days=1)
+#         target_tomorrow = tomorrow.replace(hour=target_hour, minute=0, second=0, microsecond=0)
+#         delta = target_tomorrow - now
+#     return delta.total_seconds() / 3600
 
-def send_three_messages_daily():
-    global current_message_index
-    # Set to True for fast testing (short delays)
-    # Set to False for real-world timing (long delays)
-    TEST_MODE = False
+# def send_three_messages_daily():
+#     global current_message_index
+#     # Set to True for fast testing (short delays)
+#     # Set to False for real-world timing (long delays)
+#     TEST_MODE = False
 
-    while current_message_index < len(messages):
-        now = get_japan_now()
+#     while current_message_index < len(messages):
+#         now = get_japan_now()
 
-        # If current time is between 2AM and 8AM JST, wait until 8AM before sending anything
-        if 2 <= now.hour < 8:
-            sleep_duration = hours_until_next_time(8, now) * 3600
-            print(f"🌙 It's nighttime in Japan ({now.hour}:00). Sleeping {sleep_duration/3600:.2f} hours until 8AM JST...")
-            time.sleep(sleep_duration)
-            now = get_japan_now() # Update 'now' after sleeping
+#         # If current time is between 2AM and 8AM JST, wait until 8AM before sending anything
+#         if 2 <= now.hour < 8:
+#             sleep_duration = hours_until_next_time(8, now) * 3600
+#             print(f"🌙 It's nighttime in Japan ({now.hour}:00). Sleeping {sleep_duration/3600:.2f} hours until 8AM JST...")
+#             time.sleep(sleep_duration)
+#             now = get_japan_now() # Update 'now' after sleeping
 
-        # Calculate time available before 2AM JST (next "night" block)
-        # This gives us the window (from 8AM to 2AM next day, which is 18 hours)
-        available_window_hours = hours_until_next_time(2, now)
+#         # Calculate time available before 2AM JST (next "night" block)
+#         # This gives us the window (from 8AM to 2AM next day, which is 18 hours)
+#         available_window_hours = hours_until_next_time(2, now)
 
-        if available_window_hours < 0.5: # If too little time left in the window, wait for next 8AM
-            sleep_duration = hours_until_next_time(8, now) * 3600
-            print(f"⌛️ Not enough time left in active window. Waiting {sleep_duration/3600:.2f} hours for next 8AM JST...")
-            time.sleep(sleep_duration)
-            continue # Re-evaluate the loop condition and time
+#         if available_window_hours < 0.5: # If too little time left in the window, wait for next 8AM
+#             sleep_duration = hours_until_next_time(8, now) * 3600
+#             print(f"⌛️ Not enough time left in active window. Waiting {sleep_duration/3600:.2f} hours for next 8AM JST...")
+#             time.sleep(sleep_duration)
+#             continue # Re-evaluate the loop condition and time
 
-        # Determine how many messages to send in this cycle (up to 3)
-        messages_to_send_this_cycle = min(3, len(messages) - current_message_index)
+#         # Determine how many messages to send in this cycle (up to 3)
+#         messages_to_send_this_cycle = min(3, len(messages) - current_message_index)
         
-        if messages_to_send_this_cycle == 0:
-            print("✅ All messages have been sent!")
-            break
+#         if messages_to_send_this_cycle == 0:
+#             print("✅ All messages have been sent!")
+#             break
 
-        if TEST_MODE:
-            # Short fixed delays for testing
-            delays_seconds = [5] * messages_to_send_this_cycle # 5 seconds between messages
-        else:
-            # Distribute available_window_hours among messages and remaining time
-            # Divide the available window into `messages_to_send_this_cycle` slots
-            # Plus one more slot for the end-of-day wait if not all messages are sent
-            num_slots = messages_to_send_this_cycle + 1 
-            weights = [random.random() for _ in range(num_slots)]
-            total_weight = sum(weights)
+#         if TEST_MODE:
+#             # Short fixed delays for testing
+#             delays_seconds = [5] * messages_to_send_this_cycle # 5 seconds between messages
+#         else:
+#             # Distribute available_window_hours among messages and remaining time
+#             # Divide the available window into `messages_to_send_this_cycle` slots
+#             # Plus one more slot for the end-of-day wait if not all messages are sent
+#             num_slots = messages_to_send_this_cycle + 1 
+#             weights = [random.random() for _ in range(num_slots)]
+#             total_weight = sum(weights)
             
-            # Distribute the available hours based on weights
-            distributed_hours = [(w / total_weight) * available_window_hours for w in weights]
+#             # Distribute the available hours based on weights
+#             distributed_hours = [(w / total_weight) * available_window_hours for w in weights]
             
-            delays_seconds = [h * 3600 for h in distributed_hours[:-1]] # Convert hours to seconds for messages
-            end_of_day_wait_seconds = distributed_hours[-1] * 3600
+#             delays_seconds = [h * 3600 for h in distributed_hours[:-1]] # Convert hours to seconds for messages
+#             end_of_day_wait_seconds = distributed_hours[-1] * 3600
 
-        print(f"Starting new cycle. Will send {messages_to_send_this_cycle} messages.")
-        for i in range(messages_to_send_this_cycle):
-            if current_message_index >= len(messages):
-                break # All messages sent
+#         print(f"Starting new cycle. Will send {messages_to_send_this_cycle} messages.")
+#         for i in range(messages_to_send_this_cycle):
+#             if current_message_index >= len(messages):
+#                 break # All messages sent
             
-            send_next_message_scheduled()
+#             send_next_message_scheduled()
 
-            if current_message_index < len(messages): # Don't delay after the very last message
-                delay = delays_seconds[i] if i < len(delays_seconds) else (end_of_day_wait_seconds / (messages_to_send_this_cycle - i)) if messages_to_send_this_cycle > i else 0
+#             if current_message_index < len(messages): # Don't delay after the very last message
+#                 delay = delays_seconds[i] if i < len(delays_seconds) else (end_of_day_wait_seconds / (messages_to_send_this_cycle - i)) if messages_to_send_this_cycle > i else 0
 
-                if TEST_MODE:
-                    print(f"🧪 Test mode: waiting {delay:.0f} seconds before next message...")
-                    time.sleep(delay)
-                else:
-                    print(f"⏳ Waiting {delay/3600:.2f} hours before next message...")
-                    time.sleep(delay)
-            else:
-                break # All messages sent, exit loop
+#                 if TEST_MODE:
+#                     print(f"🧪 Test mode: waiting {delay:.0f} seconds before next message...")
+#                     time.sleep(delay)
+#                 else:
+#                     print(f"⏳ Waiting {delay/3600:.2f} hours before next message...")
+#                     time.sleep(delay)
+#             else:
+#                 break # All messages sent, exit loop
 
-        # After all messages for the day are sent, wait until the next day's 8 AM window
-        if current_message_index < len(messages): # Only wait if there are still messages left
-            # This accounts for time already passed in the loop
-            now = get_japan_now()
-            sleep_duration = hours_until_next_time(8, now) * 3600
-            if sleep_duration > 0:
-                print(f"🌅 Daily messages sent. Waiting {sleep_duration/3600:.2f} hours until next 8AM JST...")
-                time.sleep(sleep_duration)
+#         # After all messages for the day are sent, wait until the next day's 8 AM window
+#         if current_message_index < len(messages): # Only wait if there are still messages left
+#             # This accounts for time already passed in the loop
+#             now = get_japan_now()
+#             sleep_duration = hours_until_next_time(8, now) * 3600
+#             if sleep_duration > 0:
+#                 print(f"🌅 Daily messages sent. Waiting {sleep_duration/3600:.2f} hours until next 8AM JST...")
+#                 time.sleep(sleep_duration)
 
-        else:
-            print("✅ All scheduled messages have been sent, stopping background thread.")
+#         else:
+#             print("✅ All scheduled messages have been sent, stopping background thread.")
 
 
     
@@ -543,7 +543,7 @@ def send_three_messages_daily():
 
 # print("📬 Bot is running... Will send 3 messages daily.")
 
-bot.infinity_polling()
+# bot.infinity_polling()
 # ===================0 Daily Messages (Background Thread) 0====================
 
     
@@ -592,5 +592,5 @@ bot.infinity_polling()
 
 # # =================== BOT STARTUP ====================
 
-# bot.infinity_polling()
+bot.infinity_polling()
     
