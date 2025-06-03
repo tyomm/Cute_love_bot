@@ -480,54 +480,120 @@ def send_three_messages_daily():
 
 
 # ===================1 Daily Messages (Background Thread) 1====================
+import threading
+import schedule
+import time
+from telebot import TeleBot
+import os
 
+bot = TeleBot("YOUR_TOKEN")
+
+CHAT_ID = "7843995956"
+MESSAGE_FILE = "message.txt"
+POSITION_FILE = "position.txt"
+
+# Get next message from the file, skip empty lines, save position
+def get_next_message():
+    # Read all non-empty lines
+    with open(MESSAGE_FILE, "r", encoding="utf-8") as f:
+        messages = [line.strip() for line in f if line.strip()]
+    
+    # Read current position
+    position = 0
+    if os.path.exists(POSITION_FILE):
+        with open(POSITION_FILE, "r") as f:
+            try:
+                position = int(f.read().strip())
+            except:
+                position = 0
+
+    # If all messages sent, stop
+    if position >= len(messages):
+        return None
+
+    msg = messages[position]
+
+    # Update position for next call
+    with open(POSITION_FILE, "w") as f:
+        f.write(str(position + 1))
+
+    return msg
+
+def send_scheduled_message():
+    msg = get_next_message()
+    if msg:
+        bot.send_message(CHAT_ID, msg)
+        print(f"✅ Sent message: {msg}")
+    else:
+        print("❌ No new message to send.")
+
+# Your 3 fixed times (replace with your generated times if needed)
+time1 = "08:00"
+time2 = "13:00"
+time3 = "18:00"
+
+# Schedule sending 3 messages per day
+schedule.every().day.at(time1).do(send_scheduled_message)
+schedule.every().day.at(time2).do(send_scheduled_message)
+schedule.every().day.at(time3).do(send_scheduled_message)
+
+def run_schedule():
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+
+# Run scheduler in a background thread
+threading.Thread(target=run_schedule, daemon=True).start()
+
+print("📬 Bot is running... Will send 3 messages daily.")
+bot.infinity_polling()
 # ===================0 Daily Messages (Background Thread) 0====================
 
     
-# =================== Telegram Database Saving ====================
-closed = False
+# # =================== Telegram Database Saving ====================
+# closed = False
 
-@bot.message_handler(content_types=['text'])
-def get_text_messages(message):
-    global closed
-    chat_id = message.chat.id
-    user_text = message.text.lower()
+# @bot.message_handler(content_types=['text'])
+# def get_text_messages(message):
+#     global closed
+#     chat_id = message.chat.id
+#     user_text = message.text.lower()
 
-    try:
-        if user_text == '/':  # '/finish'
-            print(f"User {chat_id} sent '/'. Closing database.")
-            closed = True
-            bot.send_message(6921647429, "Closed the DataBase /")
-            # Ensure the file exists before trying to open
-            try:
-                with open("Data_Base/File_DataBase.txt", "rb") as file1:
-                    bot.send_document(6921647429, file1)
-                # Clear content after sending
-                with open("Data_Base/File_DataBase.txt", "w", encoding="utf-8") as file:
-                    file.truncate()
-            except FileNotFoundError:
-                bot.send_message(6921647429, "Data_Base/File_DataBase.txt not found.")
-            except Exception as e:
-                bot.send_message(6921647429, f"Error processing database file: {e}")
+#     try:
+#         if user_text == '/':  # '/finish'
+#             print(f"User {chat_id} sent '/'. Closing database.")
+#             closed = True
+#             bot.send_message(6921647429, "Closed the DataBase /")
+#             # Ensure the file exists before trying to open
+#             try:
+#                 with open("Data_Base/File_DataBase.txt", "rb") as file1:
+#                     bot.send_document(6921647429, file1)
+#                 # Clear content after sending
+#                 with open("Data_Base/File_DataBase.txt", "w", encoding="utf-8") as file:
+#                     file.truncate()
+#             except FileNotFoundError:
+#                 bot.send_message(6921647429, "Data_Base/File_DataBase.txt not found.")
+#             except Exception as e:
+#                 bot.send_message(6921647429, f"Error processing database file: {e}")
 
-        elif user_text == '//':  # '/continue'
-            print(f"User {chat_id} sent '//'. Opening database.")
-            bot.send_message(6921647429, "Opened the DataBase //")
-            closed = False
+#         elif user_text == '//':  # '/continue'
+#             print(f"User {chat_id} sent '//'. Opening database.")
+#             bot.send_message(6921647429, "Opened the DataBase //")
+#             closed = False
             
-        # Only write to file if not a command and database is not closed
-        elif not closed and not user_text.startswith('/'): # Ensure it's not another command
-            print(f"Saving text from {chat_id}: {message.text}")
-            with open("Data_Base/File_DataBase.txt", "a", encoding="utf-8") as file:
-                file.write("\n")
-                file.write(message.text)
-    except Exception as e:
-        print(f"An error occurred in get_text_messages for chat {chat_id}: {e}")
-        # Optionally, send an error message back to the user
-        # bot.send_message(chat_id, "Sorry, something went wrong with your message.")
+#         # Only write to file if not a command and database is not closed
+#         elif not closed and not user_text.startswith('/'): # Ensure it's not another command
+#             print(f"Saving text from {chat_id}: {message.text}")
+#             with open("Data_Base/File_DataBase.txt", "a", encoding="utf-8") as file:
+#                 file.write("\n")
+#                 file.write(message.text)
+#     except Exception as e:
+#         print(f"An error occurred in get_text_messages for chat {chat_id}: {e}")
+#         # Optionally, send an error message back to the user
+#         # bot.send_message(chat_id, "Sorry, something went wrong with your message.")
 
 
-# =================== BOT STARTUP ====================
+# # =================== BOT STARTUP ====================
 
-bot.infinity_polling()
+# bot.infinity_polling()
     
