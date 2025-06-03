@@ -379,51 +379,51 @@ time1, time2, time3 = generate_three_times()
 # ===========================================
 
 
-# ========== Scheduled Messaging ==========
-def get_next_message():
-    # Read all messages
-    with open(MESSAGE_FILE, 'r', encoding='utf-8') as f:
-        messages = [line.strip() for line in f if line.strip()]
+# # ========== Scheduled Messaging ==========
+# def get_next_message():
+#     # Read all messages
+#     with open(MESSAGE_FILE, 'r', encoding='utf-8') as f:
+#         messages = [line.strip() for line in f if line.strip()]
 
-    # Read current position
-    position = 0
-    if os.path.exists(POSITION_FILE):
-        with open(POSITION_FILE, 'r') as f:
-            try:
-                position = int(f.read().strip())
-            except ValueError:
-                position = 0
+#     # Read current position
+#     position = 0
+#     if os.path.exists(POSITION_FILE):
+#         with open(POSITION_FILE, 'r') as f:
+#             try:
+#                 position = int(f.read().strip())
+#             except ValueError:
+#                 position = 0
 
-    if position >= len(messages):
-        return None
+#     if position >= len(messages):
+#         return None
 
-    next_message = messages[position]
-    with open(POSITION_FILE, 'w') as f:
-        f.write(str(position + 1))
+#     next_message = messages[position]
+#     with open(POSITION_FILE, 'w') as f:
+#         f.write(str(position + 1))
 
-    return next_message
+#     return next_message
 
-def send_scheduled_message():
-    msg = get_next_message()
-    if msg:
-        bot.send_message(CHAT_ID, msg)
-        print(f"✅ Sent: {msg}")
-    else:
-        print("❌ No new message to send.")
+# def send_scheduled_message():
+#     msg = get_next_message()
+#     if msg:
+#         bot.send_message(CHAT_ID, msg)
+#         print(f"✅ Sent: {msg}")
+#     else:
+#         print("❌ No new message to send.")
 
-schedule.every().day.at(time1).do(send_scheduled_message)
-schedule.every().day.at(time2).do(send_scheduled_message)
-schedule.every().day.at(time3).do(send_scheduled_message)
+# schedule.every().day.at(time1).do(send_scheduled_message)
+# schedule.every().day.at(time2).do(send_scheduled_message)
+# schedule.every().day.at(time3).do(send_scheduled_message)
 
-print(f"📬 Bot is running... Will send 3 messages daily at {time1}, {time2}, and {time3}.")
+# print(f"📬 Bot is running... Will send 3 messages daily at {time1}, {time2}, and {time3}.")
 
-def run_schedule():
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
+# def run_schedule():
+#     while True:
+#         schedule.run_pending()
+#         time.sleep(1)
 
-threading.Thread(target=run_schedule, daemon=True).start()
-# ===========================================
+# threading.Thread(target=run_schedule, daemon=True).start()
+# # ===========================================
 
 
 # ========== Telegram Database Saving ==========
