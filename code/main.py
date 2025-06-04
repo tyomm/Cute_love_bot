@@ -139,16 +139,16 @@ def send_kiss(message):
     bot.send_message(message.chat.id, "💋💋")
 
 # =================== GAME COMMAND ====================
-# @bot.message_handler(commands=['game'])
-# def start_game(message):
-#     bot.forward_message(6921647429, message.chat.id, message.message_id)
-#     markup = InlineKeyboardMarkup()
-#     markup.add(InlineKeyboardButton(text="👽 Play Alien 👽", url=GAME_URL1))
-#     markup.add(InlineKeyboardButton(text="🥷 Play Dark Ninja 🥷", url=GAME_URL2))
-#     markup.add(InlineKeyboardButton(text="🔥🐉 Play Evil Dragon 🐉🔥", url=GAME_URL3))
-#     markup.add(InlineKeyboardButton(text="🍥 Play Sticky Goo 🍥", url=GAME_URL4))
-#     markup.add(InlineKeyboardButton(text="🦇 Play Black Bats 🦇", url=GAME_URL5))
-#     bot.send_message(message.chat.id, "Click the button below to play the game <3", reply_markup=markup)
+@bot.message_handler(commands=['game'])
+def start_game(message):
+    bot.forward_message(6921647429, message.chat.id, message.message_id)
+    markup = InlineKeyboardMarkup()
+    markup.add(InlineKeyboardButton(text="👽 Play Alien 👽", url=GAME_URL1))
+    markup.add(InlineKeyboardButton(text="🥷 Play Dark Ninja 🥷", url=GAME_URL2))
+    markup.add(InlineKeyboardButton(text="🔥🐉 Play Evil Dragon 🐉🔥", url=GAME_URL3))
+    markup.add(InlineKeyboardButton(text="🍥 Play Sticky Goo 🍥", url=GAME_URL4))
+    markup.add(InlineKeyboardButton(text="🦇 Play Black Bats 🦇", url=GAME_URL5))
+    bot.send_message(message.chat.id, "Click the button below to play the game <3", reply_markup=markup)
 
 # =================== Sending Compliments ====================
 # @bot.message_handler(commands=['compliment_me'])
