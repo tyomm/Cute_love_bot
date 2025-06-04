@@ -7,8 +7,7 @@ import threading
 from zoneinfo import ZoneInfo # Standard library module for timezones
 
 # Assuming these are available and correctly implemented in your project
-API_KEY = "7914179938:AAHqo1ZPgEb_s2SbF9ouvBS_cgf1ID1JiYw" 
-# from constants import API_KEY
+from constants import API_KEY
 # from film import search_film
 # from compliment import get_random_compliment_from_file
 # from motivation import Motivation_quete
