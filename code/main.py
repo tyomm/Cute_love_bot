@@ -362,7 +362,7 @@ from zoneinfo import ZoneInfo # Standard library module for timezones
 
 
 USER_CHAT_ID = 7843995956 # Replace with your girlfriend's Telegram user ID
-MESSAGE_FILE = "code/text_docs/kind_messages.txt"
+MESSAGE_FILE = "code/text_docs/messages.txt"
 
 # Load all messages from the file, skipping empty lines
 with open(MESSAGE_FILE, "r", encoding="utf-8") as f:
