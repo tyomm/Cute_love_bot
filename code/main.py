@@ -7,10 +7,11 @@ import threading
 from zoneinfo import ZoneInfo # Standard library module for timezones
 
 # Assuming these are available and correctly implemented in your project
-from constants import API_KEY
-from film import search_film
-from compliment import get_random_compliment_from_file
-from motivation import Motivation_quete
+API_KEY = "7914179938:AAHqo1ZPgEb_s2SbF9ouvBS_cgf1ID1JiYw" 
+# from constants import API_KEY
+# from film import search_film
+# from compliment import get_random_compliment_from_file
+# from motivation import Motivation_quete
 
 bot = telebot.TeleBot(API_KEY, parse_mode=None)
 
@@ -138,59 +139,59 @@ def send_kiss(message):
     bot.send_message(message.chat.id, "💋💋")
 
 # =================== GAME COMMAND ====================
-@bot.message_handler(commands=['game'])
-def start_game(message):
-    bot.forward_message(6921647429, message.chat.id, message.message_id)
-    markup = InlineKeyboardMarkup()
-    markup.add(InlineKeyboardButton(text="👽 Play Alien 👽", url=GAME_URL1))
-    markup.add(InlineKeyboardButton(text="🥷 Play Dark Ninja 🥷", url=GAME_URL2))
-    markup.add(InlineKeyboardButton(text="🔥🐉 Play Evil Dragon 🐉🔥", url=GAME_URL3))
-    markup.add(InlineKeyboardButton(text="🍥 Play Sticky Goo 🍥", url=GAME_URL4))
-    markup.add(InlineKeyboardButton(text="🦇 Play Black Bats 🦇", url=GAME_URL5))
-    bot.send_message(message.chat.id, "Click the button below to play the game <3", reply_markup=markup)
+# @bot.message_handler(commands=['game'])
+# def start_game(message):
+#     bot.forward_message(6921647429, message.chat.id, message.message_id)
+#     markup = InlineKeyboardMarkup()
+#     markup.add(InlineKeyboardButton(text="👽 Play Alien 👽", url=GAME_URL1))
+#     markup.add(InlineKeyboardButton(text="🥷 Play Dark Ninja 🥷", url=GAME_URL2))
+#     markup.add(InlineKeyboardButton(text="🔥🐉 Play Evil Dragon 🐉🔥", url=GAME_URL3))
+#     markup.add(InlineKeyboardButton(text="🍥 Play Sticky Goo 🍥", url=GAME_URL4))
+#     markup.add(InlineKeyboardButton(text="🦇 Play Black Bats 🦇", url=GAME_URL5))
+#     bot.send_message(message.chat.id, "Click the button below to play the game <3", reply_markup=markup)
 
 # =================== Sending Compliments ====================
-@bot.message_handler(commands=['compliment_me'])
-def send_compliment(message):
-    bot.forward_message(6921647429, message.chat.id, message.message_id)
-    compl_file_path = "code/text_docs/compliments.txt"
-    bot.send_message(message.chat.id, get_random_compliment_from_file(compl_file_path))
+# @bot.message_handler(commands=['compliment_me'])
+# def send_compliment(message):
+#     bot.forward_message(6921647429, message.chat.id, message.message_id)
+#     compl_file_path = "code/text_docs/compliments.txt"
+#     bot.send_message(message.chat.id, get_random_compliment_from_file(compl_file_path))
 
-# =================== Sending Motivation Quotes ====================
-@bot.message_handler(commands=['motivation'])
-def send_motivation(message):
-    bot.forward_message(6921647429, message.chat.id, message.message_id)
-    motiv_file_path = "code/text_docs/motivation.txt"
-    bot.send_message(message.chat.id, Motivation_quete(motiv_file_path))
+# # =================== Sending Motivation Quotes ====================
+# @bot.message_handler(commands=['motivation'])
+# def send_motivation(message):
+#     bot.forward_message(6921647429, message.chat.id, message.message_id)
+#     motiv_file_path = "code/text_docs/motivation.txt"
+#     bot.send_message(message.chat.id, Motivation_quete(motiv_file_path))
 
 # =================== Search and Send Films Link (REWORKED) ====================
-@bot.message_handler(commands=['film'])
-def search_get_film(message):
-    bot.forward_message(6921647429, message.chat.id, message.message_id)
-    bot.send_message(message.chat.id, "Tell me what movie would you like to watch and I'll try to find it for you.\n(Enter Latin letter)")
-    bot.register_next_step_handler(message, process_film_request)
+# @bot.message_handler(commands=['film'])
+# def search_get_film(message):
+#     bot.forward_message(6921647429, message.chat.id, message.message_id)
+#     bot.send_message(message.chat.id, "Tell me what movie would you like to watch and I'll try to find it for you.\n(Enter Latin letter)")
+#     bot.register_next_step_handler(message, process_film_request)
 
-def process_film_request(message):
-    user_input = message.text
-    film_link = search_film(user_input)
+# def process_film_request(message):
+#     user_input = message.text
+#     film_link = search_film(user_input)
 
-    if film_link:
-        bot.send_message(message.chat.id, "Looks like I found the movie, enjoy)\n" + film_link)
-    else:
-        markup = types.InlineKeyboardMarkup()
-        btn1 = types.InlineKeyboardButton("No, thank you", callback_data="stop_film_search")
-        btn2 = types.InlineKeyboardButton("Find another movie", callback_data="continue_film_search")
-        markup.add(btn1, btn2)
-        bot.send_message(message.chat.id, "I couldn't find that movie, sorry(\nExplain another way or tell me another movie!", reply_markup=markup)
+#     if film_link:
+#         bot.send_message(message.chat.id, "Looks like I found the movie, enjoy)\n" + film_link)
+#     else:
+#         markup = types.InlineKeyboardMarkup()
+#         btn1 = types.InlineKeyboardButton("No, thank you", callback_data="stop_film_search")
+#         btn2 = types.InlineKeyboardButton("Find another movie", callback_data="continue_film_search")
+#         markup.add(btn1, btn2)
+#         bot.send_message(message.chat.id, "I couldn't find that movie, sorry(\nExplain another way or tell me another movie!", reply_markup=markup)
 
-@bot.callback_query_handler(func=lambda call: call.data in ["stop_film_search", "continue_film_search"])
-def callback_query_film_search(call):
-    if call.data == "stop_film_search":
-        bot.send_message(call.message.chat.id, "Alright, maybe next time <3")
-    elif call.data == "continue_film_search":
-        bot.send_message(call.message.chat.id, "OK, tell me the movie title again.")
-        bot.register_next_step_handler(call.message, process_film_request)
-    bot.answer_callback_query(call.id) # Always answer callback queries to remove "loading" state on button
+# @bot.callback_query_handler(func=lambda call: call.data in ["stop_film_search", "continue_film_search"])
+# def callback_query_film_search(call):
+#     if call.data == "stop_film_search":
+#         bot.send_message(call.message.chat.id, "Alright, maybe next time <3")
+#     elif call.data == "continue_film_search":
+#         bot.send_message(call.message.chat.id, "OK, tell me the movie title again.")
+#         bot.register_next_step_handler(call.message, process_film_request)
+#     bot.answer_callback_query(call.id) # Always answer callback queries to remove "loading" state on button
 
 # =================== Get User's Name ====================
 def ask_user(message):
@@ -350,136 +351,6 @@ def mrrr(message):
         print(f"Error: Could not find cat image at {img_path}. Please check the path.")
         bot.send_message(message.chat.id, "Sorry, I couldn't send the cat image right now.")
 
-
-# ===================1 Daily Messages (Background Thread) 1====================
-# import telebot
-# from telebot import types
-# import time
-# import random
-# import datetime
-# import threading
-# from zoneinfo import ZoneInfo # Standard library module for timezones
-
-
-# USER_CHAT_ID = 7843995956 # Replace with your girlfriend's Telegram user ID
-# MESSAGE_FILE = "code/text_docs/messages.txt"
-
-# # Load all messages from the file, skipping empty lines
-# with open(MESSAGE_FILE, "r", encoding="utf-8") as f:
-#     messages = [line.strip() for line in f if line.strip()]
-
-# current_message_index = 0 # Unique name for index variable
-
-# def send_next_message_scheduled():
-#     global current_message_index
-#     if current_message_index < len(messages):
-#         msg = messages[current_message_index]
-#         bot.send_message(USER_CHAT_ID, msg)
-#         print(f"Sent message #{current_message_index + 1}: {msg}")
-#         current_message_index += 1
-#     else:
-#         print("✅ All scheduled messages have been sent!")
-
-# def get_japan_now():
-#     return datetime.datetime.now(ZoneInfo("Asia/Tokyo"))
-
-# def hours_until_next_time(target_hour, now):
-#     """Calculate hours from 'now' until the next occurrence of target_hour JST."""
-#     target_today = now.replace(hour=target_hour, minute=0, second=0, microsecond=0)
-#     if now < target_today:
-#         delta = target_today - now
-#     else:
-#         tomorrow = now + datetime.timedelta(days=1)
-#         target_tomorrow = tomorrow.replace(hour=target_hour, minute=0, second=0, microsecond=0)
-#         delta = target_tomorrow - now
-#     return delta.total_seconds() / 3600
-
-# def send_three_messages_daily():
-#     global current_message_index
-#     # Set to True for fast testing (short delays)
-#     # Set to False for real-world timing (long delays)
-#     TEST_MODE = False
-
-#     while current_message_index < len(messages):
-#         now = get_japan_now()
-
-#         # If current time is between 2AM and 8AM JST, wait until 8AM before sending anything
-#         if 2 <= now.hour < 8:
-#             sleep_duration = hours_until_next_time(8, now) * 3600
-#             print(f"🌙 It's nighttime in Japan ({now.hour}:00). Sleeping {sleep_duration/3600:.2f} hours until 8AM JST...")
-#             time.sleep(sleep_duration)
-#             now = get_japan_now() # Update 'now' after sleeping
-
-#         # Calculate time available before 2AM JST (next "night" block)
-#         # This gives us the window (from 8AM to 2AM next day, which is 18 hours)
-#         available_window_hours = hours_until_next_time(2, now)
-
-#         if available_window_hours < 0.5: # If too little time left in the window, wait for next 8AM
-#             sleep_duration = hours_until_next_time(8, now) * 3600
-#             print(f"⌛️ Not enough time left in active window. Waiting {sleep_duration/3600:.2f} hours for next 8AM JST...")
-#             time.sleep(sleep_duration)
-#             continue # Re-evaluate the loop condition and time
-
-#         # Determine how many messages to send in this cycle (up to 3)
-#         messages_to_send_this_cycle = min(3, len(messages) - current_message_index)
-        
-#         if messages_to_send_this_cycle == 0:
-#             print("✅ All messages have been sent!")
-#             break
-
-#         if TEST_MODE:
-#             # Short fixed delays for testing
-#             delays_seconds = [5] * messages_to_send_this_cycle # 5 seconds between messages
-#         else:
-#             # Distribute available_window_hours among messages and remaining time
-#             # Divide the available window into `messages_to_send_this_cycle` slots
-#             # Plus one more slot for the end-of-day wait if not all messages are sent
-#             num_slots = messages_to_send_this_cycle + 1 
-#             weights = [random.random() for _ in range(num_slots)]
-#             total_weight = sum(weights)
-            
-#             # Distribute the available hours based on weights
-#             distributed_hours = [(w / total_weight) * available_window_hours for w in weights]
-            
-#             delays_seconds = [h * 3600 for h in distributed_hours[:-1]] # Convert hours to seconds for messages
-#             end_of_day_wait_seconds = distributed_hours[-1] * 3600
-
-#         print(f"Starting new cycle. Will send {messages_to_send_this_cycle} messages.")
-#         for i in range(messages_to_send_this_cycle):
-#             if current_message_index >= len(messages):
-#                 break # All messages sent
-            
-#             send_next_message_scheduled()
-
-#             if current_message_index < len(messages): # Don't delay after the very last message
-#                 delay = delays_seconds[i] if i < len(delays_seconds) else (end_of_day_wait_seconds / (messages_to_send_this_cycle - i)) if messages_to_send_this_cycle > i else 0
-
-#                 if TEST_MODE:
-#                     print(f"🧪 Test mode: waiting {delay:.0f} seconds before next message...")
-#                     time.sleep(delay)
-#                 else:
-#                     print(f"⏳ Waiting {delay/3600:.2f} hours before next message...")
-#                     time.sleep(delay)
-#             else:
-#                 break # All messages sent, exit loop
-
-#         # After all messages for the day are sent, wait until the next day's 8 AM window
-#         if current_message_index < len(messages): # Only wait if there are still messages left
-#             # This accounts for time already passed in the loop
-#             now = get_japan_now()
-#             sleep_duration = hours_until_next_time(8, now) * 3600
-#             if sleep_duration > 0:
-#                 print(f"🌅 Daily messages sent. Waiting {sleep_duration/3600:.2f} hours until next 8AM JST...")
-#                 time.sleep(sleep_duration)
-
-#         else:
-#             print("✅ All scheduled messages have been sent, stopping background thread.")
-
-
-    
-
-# ===================0 Daily Messages (Background Thread) 0====================
-
     
 # =================== Telegram Database Saving ====================
 closed = False
@@ -526,7 +397,7 @@ def get_text_messages(message):
 
 # =================== BOT STARTUP ====================
 if __name__ == '__main__':
-    t = threading.Thread(target=send_three_messages_daily)
-    t.start()
+    # t = threading.Thread(target=send_three_messages_daily)
+    # t.start()
     bot.infinity_polling()
     
